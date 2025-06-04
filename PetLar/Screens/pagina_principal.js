@@ -1,0 +1,222 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { signOut } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
+
+const PaginaPrincipal = ({ navigation }) => {
+    const [userData, setUserData] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        // Verificar usuário logado
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                setCurrentUser(user);
+                // Buscar dados do usuário no Firestore
+                await buscarDadosUsuario(user.uid);
+            } else {
+                // Usuário não logado, redirecionar
+                navigation.navigate('Home');
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const buscarDadosUsuario = async (uid) => {
+        try {
+            const q = query(
+                collection(db, 'usuarios'), 
+                where('uid', '==', uid)
+            );
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const userData = querySnapshot.docs[0].data();
+                setUserData(userData);
+                console.log('Dados do usuário:', userData);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigation.navigate('Home');
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            {/* Cabeçalho */}
+            <View style={styles.cabecalho}>
+                <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
+                <Text style={styles.titulo_cabecalho}>PetLar</Text>
+                <TouchableOpacity onPress={handleLogout} style={styles.botao_logout}>
+                    <Text style={styles.texto_logout}>Sair</Text>
+                </TouchableOpacity>
+            </View>
+
+            {/* Conteúdo principal */}
+            <View style={styles.conteudo}>
+                <Text style={styles.titulo_principal}>Bem-vindo ao PetLar!</Text>
+                
+                {/* Exibir informações do usuário */}
+                {currentUser && (
+                    <View style={styles.info_usuario}>
+                        <Text style={styles.email_usuario}>
+                            Logado como: {currentUser.email}
+                        </Text>
+                        {userData && userData.dataCriacao && (
+                            <Text style={styles.data_cadastro}>
+                                Membro desde: {new Date(userData.dataCriacao).toLocaleDateString('pt-BR')}
+                            </Text>
+                        )}
+                    </View>
+                )}
+                
+                <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
+
+                {/* Botões de ação principais */}
+                <View style={styles.container_botoes}>
+                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
+                        <Text style={styles.texto_botao}>Ver Pets Disponíveis</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
+                        <Text style={styles.texto_botao}>Cadastrar Pet</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#85B542' }]}>
+                        <Text style={styles.texto_botao}>Meu Perfil</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
+                        <Text style={styles.texto_botao}>Favoritos</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* Rodapé */}
+            <View style={styles.rodape}>
+                <Text style={styles.texto_rodape}>© 2025 PetLar. Todos os direitos reservados.</Text>
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    cabecalho: {
+        width: '100%',
+        height: 80,
+        backgroundColor: '#284E73',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingTop: 30,
+    },
+    logo: {
+        width: 40,
+        height: 40,
+    },
+    titulo_cabecalho: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    botao_logout: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 15,
+        paddingVertical: 8,
+        borderRadius: 20,
+    },
+    texto_logout: {
+        color: '#284E73',
+        fontSize: 14,
+        fontWeight: 'semibold',
+    },
+    conteudo: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    titulo_principal: {
+        fontSize: 28,
+        color: '#307D53',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    info_usuario: {
+        backgroundColor: '#f0f0f0',
+        padding: 15,
+        borderRadius: 10,
+        marginVertical: 15,
+        alignItems: 'center',
+    },
+    email_usuario: {
+        fontSize: 14,
+        color: '#284E73',
+        fontWeight: 'semibold',
+        marginBottom: 5,
+    },
+    data_cadastro: {
+        fontSize: 12,
+        color: '#666',
+    },
+    subtitulo: {
+        fontSize: 16,
+        color: '#666',
+        textAlign: 'center',
+        marginBottom: 40,
+    },
+    container_botoes: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    botao: {
+        width: 280,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    texto_botao: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'semibold',
+    },
+    rodape: {
+        width: '100%',
+        height: 60,
+        backgroundColor: '#85B542',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    texto_rodape: {
+        color: '#fff',
+        fontSize: 12,
+    },
+});
+
+export default PaginaPrincipal;

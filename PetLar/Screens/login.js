@@ -1,7 +1,66 @@
-import React from 'react';
-import { View, Text, Button, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
 
-const Login = () => {
+const Login = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+
+    const handleLogin = async () => {
+        if (!email || !senha) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos');
+            return;
+        }
+
+        try {
+            // Fazer login com Firebase Auth
+            const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+            const user = userCredential.user;
+            console.log('Login realizado com sucesso:', user.uid);
+
+            // Opcional: Buscar dados adicionais do usuário no Firestore
+            const q = query(
+                collection(db, 'usuarios'), 
+                where('uid', '==', user.uid)
+            );
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const userData = querySnapshot.docs[0].data();
+                console.log('Dados do usuário do Firestore:', userData);
+                // Aqui você pode salvar os dados em um contexto global se necessário
+            }
+
+            navigation.navigate('PaginaPrincipal');
+            
+        } catch (error) {
+            let errorMessage = 'Falha no login';
+            
+            // Tratamento de erros específicos
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    errorMessage = 'Usuário não encontrado';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage = 'Senha incorreta';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'Email inválido';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage = 'Muitas tentativas. Tente novamente mais tarde';
+                    break;
+                default:
+                    errorMessage = error.message;
+            }
+            
+            Alert.alert('Erro', errorMessage);
+            console.error('Erro no login:', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
 
@@ -17,16 +76,35 @@ const Login = () => {
             {/* Campos de entrada */}
             <View style={styles.formulario}>
                 <Text style={styles.texto_campo}>E-mail:</Text>
-                <TextInput style={styles.campo} placeholder="Digite seu e-mail"/>
+                <TextInput 
+                    style={styles.campo} 
+                    placeholder="Digite seu e-mail"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
                 <Text style={styles.texto_campo}>Senha:</Text>
-                <TextInput style={styles.campo} placeholder="Digite sua senha"/>
+                <TextInput 
+                    style={styles.campo} 
+                    placeholder="Digite sua senha"
+                    value={senha}
+                    onChangeText={setSenha}
+                    secureTextEntry
+                />
             </View>
 
             {/* Botões de ação */}
-            <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
+            <TouchableOpacity 
+                style={[styles.botao, { backgroundColor: '#307C53' }]}
+                onPress={handleLogin}
+            >
                 <Text style={styles.texto_botao}>Entrar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
+            <TouchableOpacity 
+                style={[styles.botao, { backgroundColor: '#273A57' }]}
+                onPress={() => navigation.goBack()}
+            >
                 <Text style={styles.texto_botao}>Voltar</Text>
             </TouchableOpacity>
 

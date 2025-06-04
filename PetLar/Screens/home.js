@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Home = () => {
+const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
 
@@ -17,10 +17,16 @@ const Home = () => {
             <Text style={styles.texto_motivacional}>Cada pet merece um lar, cada lar merece um pet.</Text>
 
             {/* Botões de ação */}
-            <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
+            <TouchableOpacity 
+                style={[styles.botao, { backgroundColor: '#307C53' }]}
+                onPress={() => navigation.navigate('Login')}
+            >
                 <Text style={styles.texto_botao}>Entre em sua conta</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
+            <TouchableOpacity 
+                style={[styles.botao, { backgroundColor: '#273A57' }]}
+                onPress={() => navigation.navigate('CadastroUsuario')}
+            >
                 <Text style={styles.texto_botao}>Cadastre-se</Text>
             </TouchableOpacity>
 
