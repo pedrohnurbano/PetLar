@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './Screens/home';
 import Login from './Screens/login';
-<<<<<<< Updated upstream
 import CadastroUsuario from './Screens/cadastro_usuario';
 import PaginaPrincipal from './Screens/pagina_principal';
 
@@ -25,17 +24,5 @@ export default function App() {
         <Stack.Screen name="PaginaPrincipal" component={PaginaPrincipal} />
       </Stack.Navigator>
     </NavigationContainer>
-=======
-import Cadastro_Usuario from './Screens/cadastro_usuario';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      {/* <Home/> */}
-      {/* <Login/> */}
-      <Cadastro_Usuario/>
-      <StatusBar style="auto" />
-    </View>
->>>>>>> Stashed changes
   );
 }
