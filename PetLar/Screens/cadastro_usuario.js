@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -85,6 +86,12 @@ const CadastroUsuario = ({ navigation }) => {
         }
     };
 
+=======
+import React from 'react';
+import { View, Text, Button, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+
+const Login = () => {
+>>>>>>> Stashed changes
     return (
         <View style={styles.container}>
 
@@ -100,6 +107,7 @@ const CadastroUsuario = ({ navigation }) => {
             {/* Campos de entrada */}
             <View style={styles.formulario}>
                 <Text style={styles.texto_campo}>E-mail:</Text>
+<<<<<<< Updated upstream
                 <TextInput 
                     style={styles.campo} 
                     placeholder="Digite seu e-mail"
@@ -129,6 +137,18 @@ const CadastroUsuario = ({ navigation }) => {
                 style={[styles.botao, { backgroundColor: '#273A57' }]}
                 onPress={() => navigation.goBack()}
             >
+=======
+                <TextInput style={styles.campo} placeholder="Digite seu e-mail"/>
+                <Text style={styles.texto_campo}>Senha:</Text>
+                <TextInput style={styles.campo} placeholder="Digite sua senha"/>
+            </View>
+
+            {/* Botões de ação */}
+            <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
+                <Text style={styles.texto_botao}>Cadastrar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
+>>>>>>> Stashed changes
                 <Text style={styles.texto_botao}>Voltar</Text>
             </TouchableOpacity>
 
@@ -206,4 +226,8 @@ const styles = StyleSheet.create({
     },
 });
 
+<<<<<<< Updated upstream
 export default CadastroUsuario;
+=======
+export default Login;
+>>>>>>> Stashed changes
