@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 
-const CadastroUsuario = ({ navigation }) => {
+const Cadastro_Usuario = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
@@ -86,55 +86,58 @@ const CadastroUsuario = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <ScrollView>
+                <View style={styles.container}>
 
-            {/* Cabeçalho sem logo */}
-            <View style={styles.cabecalho}/>
+                    {/* Cabeçalho sem logo */}
+                    <View style={styles.cabecalho}/>
 
-            {/* Logo */}
-            <Image style={styles.logo} source={require('../assets/logo.png')}/>
-            
-            {/* Título em texto */}
-            <Text style={styles.titulo}>Cadastre sua conta</Text>
+                    {/* Logo */}
+                    <Image style={styles.logo} source={require('../assets/logo.png')}/>
+                    
+                    {/* Título em texto */}
+                    <Text style={styles.titulo}>Cadastro de Usuário</Text>
 
-            {/* Campos de entrada */}
-            <View style={styles.formulario}>
-                <Text style={styles.texto_campo}>E-mail:</Text>
-                <TextInput 
-                    style={styles.campo} 
-                    placeholder="Digite seu e-mail"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                />
-                <Text style={styles.texto_campo}>Senha:</Text>
-                <TextInput 
-                    style={styles.campo} 
-                    placeholder="Digite sua senha (mín. 6 caracteres)"
-                    value={senha}
-                    onChangeText={setSenha}
-                    secureTextEntry
-                />
-            </View>
+                    {/* Campos de entrada */}
+                    <View style={styles.formulario}>
+                        <Text style={styles.texto_campo}>E-mail:</Text>
+                        <TextInput 
+                            style={styles.campo} 
+                            placeholder="Digite seu e-mail"
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                        <Text style={styles.texto_campo}>Senha:</Text>
+                        <TextInput 
+                            style={styles.campo} 
+                            placeholder="Digite sua senha (mín. 6 caracteres)"
+                            value={senha}
+                            onChangeText={setSenha}
+                            secureTextEntry
+                        />
+                    </View>
 
-            {/* Botões de ação */}
-            <TouchableOpacity 
-                style={[styles.botao, { backgroundColor: '#307C53' }]}
-                onPress={handleCadastro}
-            >
-                <Text style={styles.texto_botao}>Cadastrar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={[styles.botao, { backgroundColor: '#273A57' }]}
-                onPress={() => navigation.goBack()}
-            >
-                <Text style={styles.texto_botao}>Voltar</Text>
-            </TouchableOpacity>
+                    {/* Botões de ação */}
+                    <TouchableOpacity 
+                        style={[styles.botao, { backgroundColor: '#307C53' }]}
+                        onPress={handleCadastro}
+                    >
+                        <Text style={styles.texto_botao}>Cadastrar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={[styles.botao, { backgroundColor: '#273A57' }]}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Text style={styles.texto_botao}>Voltar</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
 
             {/* Rodapé */}
             <View style={styles.rodape}/>
-
         </View>
     );
 }
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 16,
+        backgroundColor: '#FFFFFF',
     },
     // Cabeçalho sem logo:
     cabecalho: {
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
     titulo: {
         fontSize: 20,
         color: '#307D53',
-        fontWeight: 'semibold',
+        fontWeight: 'bold',
         marginBottom: 16,
     },
     // Formulário:
@@ -181,6 +184,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#283A59',
         marginVertical: 8,
+        fontWeight: 'semibold',
     },
     // Botões:
     botao: {
@@ -206,4 +210,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CadastroUsuario;
+export default Cadastro_Usuario;

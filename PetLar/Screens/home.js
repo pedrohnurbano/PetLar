@@ -1,40 +1,44 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native-web';
 
 const Home = ({ navigation }) => {
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <ScrollView>
+                <View style={styles.container}>
 
-            {/* Cabeçalho com logo */}
-            <View style={styles.cabecalho}>
-              <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
-            </View>
+                    {/* Cabeçalho com logo */}
+                    <View style={styles.cabecalho}>
+                        <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
+                    </View>
 
-            {/* Imagem principal */}
-            <Image source={require('../assets/imagem_home.jpg')} style={styles.imagem} />
+                    {/* Imagem principal */}
+                    <Image source={require('../assets/imagem_home.jpg')} style={styles.imagem} />
 
-            {/* Texto motivacional */}
-            <Text style={styles.texto_motivacional}>Cada pet merece um lar, cada lar merece um pet.</Text>
+                    {/* Texto motivacional */}
+                    <Text style={styles.texto_motivacional}>Cada pet merece um lar, cada lar merece um pet.</Text>
 
-            {/* Botões de ação */}
-            <TouchableOpacity 
-                style={[styles.botao, { backgroundColor: '#307C53' }]}
-                onPress={() => navigation.navigate('Login')}
-            >
-                <Text style={styles.texto_botao}>Entre em sua conta</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={[styles.botao, { backgroundColor: '#273A57' }]}
-                onPress={() => navigation.navigate('CadastroUsuario')}
-            >
-                <Text style={styles.texto_botao}>Cadastre-se</Text>
-            </TouchableOpacity>
+                    {/* Botões de ação */}
+                    <TouchableOpacity 
+                        style={[styles.botao, { backgroundColor: '#307C53' }]}
+                        onPress={() => navigation.navigate('Login')}
+                    >
+                        <Text style={styles.texto_botao}>Entre em sua conta</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={[styles.botao, { backgroundColor: '#273A57' }]}
+                        onPress={() => navigation.navigate('CadastroUsuario')}
+                    >
+                        <Text style={styles.texto_botao}>Cadastre-se</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
 
             {/* Rodapé */}
             <View style={styles.rodape}>
-              <Text style={styles.texto_rodape}>© 2025 PetLar. Todos os direitos reservados.</Text>
+                <Text style={styles.texto_rodape}>© 2025 PetLar. Todos os direitos reservados.</Text>
             </View>
-
         </View>
     );
 };
@@ -42,9 +46,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        padding: 16,
     },
     
     cabecalho : {

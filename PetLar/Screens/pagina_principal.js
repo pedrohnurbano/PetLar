@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
+import { ScrollView } from 'react-native-web';
 
-const PaginaPrincipal = ({ navigation }) => {
+const Pagina_Principal = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -52,55 +53,60 @@ const PaginaPrincipal = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            {/* Cabeçalho */}
-            <View style={styles.cabecalho}>
-                <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
-                <Text style={styles.titulo_cabecalho}>PetLar</Text>
-                <TouchableOpacity onPress={handleLogout} style={styles.botao_logout}>
-                    <Text style={styles.texto_logout}>Sair</Text>
-                </TouchableOpacity>
-            </View>
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
 
-            {/* Conteúdo principal */}
-            <View style={styles.conteudo}>
-                <Text style={styles.titulo_principal}>Bem-vindo ao PetLar!</Text>
-                
-                {/* Exibir informações do usuário */}
-                {currentUser && (
-                    <View style={styles.info_usuario}>
-                        <Text style={styles.email_usuario}>
-                            Logado como: {currentUser.email}
-                        </Text>
-                        {userData && userData.dataCriacao && (
-                            <Text style={styles.data_cadastro}>
-                                Membro desde: {new Date(userData.dataCriacao).toLocaleDateString('pt-BR')}
-                            </Text>
-                        )}
+                    {/* Cabeçalho */}
+                    <View style={styles.cabecalho}>
+                        <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
+                        <Text style={styles.titulo_cabecalho}>PetLar</Text>
+                        <TouchableOpacity onPress={handleLogout} style={styles.botao_logout}>
+                            <Text style={styles.texto_logout}>Sair</Text>
+                        </TouchableOpacity>
                     </View>
-                )}
-                
-                <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
 
-                {/* Botões de ação principais */}
-                <View style={styles.container_botoes}>
-                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
-                        <Text style={styles.texto_botao}>Ver Pets Disponíveis</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
-                        <Text style={styles.texto_botao}>Cadastrar Pet</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#85B542' }]}>
-                        <Text style={styles.texto_botao}>Meu Perfil</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
-                        <Text style={styles.texto_botao}>Favoritos</Text>
-                    </TouchableOpacity>
+                    {/* Conteúdo principal */}
+                    <View style={styles.conteudo}>
+                        <Text style={styles.titulo_principal}>Bem-vindo ao PetLar!</Text>
+                        
+                        {/* Exibir informações do usuário */}
+                        {currentUser && (
+                            <View style={styles.info_usuario}>
+                                <Text style={styles.email_usuario}>
+                                    Logado como: {currentUser.email}
+                                </Text>
+                                {userData && userData.dataCriacao && (
+                                    <Text style={styles.data_cadastro}>
+                                        Membro desde: {new Date(userData.dataCriacao).toLocaleDateString('pt-BR')}
+                                    </Text>
+                                )}
+                            </View>
+                        )}
+                        
+                        <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
+
+                        {/* Botões de ação principais */}
+                        <View style={styles.container_botoes}>
+                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
+                                <Text style={styles.texto_botao}>Ver Pets Disponíveis</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
+                                <Text style={styles.texto_botao}>Cadastrar Pet</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#85B542' }]}>
+                                <Text style={styles.texto_botao}>Meu Perfil</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
+                                <Text style={styles.texto_botao}>Favoritos</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
 
             {/* Rodapé */}
             <View style={styles.rodape}>
@@ -116,14 +122,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     cabecalho: {
-        width: '100%',
-        height: 80,
+        width: 402,
+        height: 60,
         backgroundColor: '#284E73',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingTop: 30,
     },
     logo: {
         width: 40,
@@ -219,4 +224,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PaginaPrincipal;
+export default Pagina_Principal;
