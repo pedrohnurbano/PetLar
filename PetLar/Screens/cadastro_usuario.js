@@ -33,14 +33,14 @@ const Cadastro_Usuario = ({ navigation }) => {
 
         try {
             console.log('Tentando criar usuário no Firebase Auth...');
-            
+
             // Criar usuário no Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
             const user = userCredential.user;
             console.log('✅ Usuário criado no Auth:', user.uid);
-            
+
             console.log('Tentando salvar no Firestore...');
-            
+
             // Salvar dados do usuário no Firestore
             const docRef = await addDoc(collection(db, 'usuarios'), {
                 uid: user.uid,
@@ -49,20 +49,20 @@ const Cadastro_Usuario = ({ navigation }) => {
             });
 
             console.log('✅ Usuário salvo no Firestore com ID:', docRef.id);
-            
+
             Alert.alert(
-                'Sucesso', 
+                'Sucesso',
                 'Conta criada com sucesso!',
                 [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
             );
-            
+
         } catch (error) {
             console.log('❌ ERRO NO CADASTRO:', error);
             console.log('Código do erro:', error.code);
             console.log('Mensagem do erro:', error.message);
-            
+
             let errorMessage = 'Erro ao criar conta';
-            
+
             // Tratamento de erros específicos do Firebase
             switch (error.code) {
                 case 'auth/email-already-in-use':
@@ -80,7 +80,7 @@ const Cadastro_Usuario = ({ navigation }) => {
                 default:
                     errorMessage = `Erro: ${error.message}`;
             }
-            
+
             Alert.alert('Erro', errorMessage);
         }
     };
@@ -91,19 +91,19 @@ const Cadastro_Usuario = ({ navigation }) => {
                 <View style={styles.container}>
 
                     {/* Cabeçalho sem logo */}
-                    <View style={styles.cabecalho}/>
+                    <View style={styles.cabecalho} />
 
                     {/* Logo */}
-                    <Image style={styles.logo} source={require('../assets/logo.png')}/>
-                    
+                    <Image style={styles.logo} source={require('../assets/logo.png')} />
+
                     {/* Título em texto */}
                     <Text style={styles.titulo}>Cadastro de Usuário</Text>
 
                     {/* Campos de entrada */}
                     <View style={styles.formulario}>
                         <Text style={styles.texto_campo}>E-mail:</Text>
-                        <TextInput 
-                            style={styles.campo} 
+                        <TextInput
+                            style={styles.campo}
                             placeholder="Digite seu e-mail"
                             value={email}
                             onChangeText={setEmail}
@@ -111,8 +111,8 @@ const Cadastro_Usuario = ({ navigation }) => {
                             autoCapitalize="none"
                         />
                         <Text style={styles.texto_campo}>Senha:</Text>
-                        <TextInput 
-                            style={styles.campo} 
+                        <TextInput
+                            style={styles.campo}
                             placeholder="Digite sua senha (mín. 6 caracteres)"
                             value={senha}
                             onChangeText={setSenha}
@@ -121,13 +121,13 @@ const Cadastro_Usuario = ({ navigation }) => {
                     </View>
 
                     {/* Botões de ação */}
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={[styles.botao, { backgroundColor: '#307C53' }]}
                         onPress={handleCadastro}
                     >
                         <Text style={styles.texto_botao}>Cadastrar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={[styles.botao, { backgroundColor: '#273A57' }]}
                         onPress={() => navigation.goBack()}
                     >
@@ -137,7 +137,7 @@ const Cadastro_Usuario = ({ navigation }) => {
             </ScrollView>
 
             {/* Rodapé */}
-            <View style={styles.rodape}/>
+            <View style={styles.rodape} />
         </View>
     );
 }
