@@ -100,39 +100,41 @@ const Cadastro_Usuario = ({ navigation }) => {
                     <Text style={styles.titulo}>Cadastro de Usuário</Text>
 
                     {/* Campos de entrada */}
-                    <View style={styles.formulario}>
-                        <Text style={styles.texto_campo}>E-mail:</Text>
-                        <TextInput
-                            style={styles.campo}
-                            placeholder="Digite seu e-mail"
-                            value={email}
-                            onChangeText={setEmail}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                        />
-                        <Text style={styles.texto_campo}>Senha:</Text>
-                        <TextInput
-                            style={styles.campo}
-                            placeholder="Digite sua senha (mín. 6 caracteres)"
-                            value={senha}
-                            onChangeText={setSenha}
-                            secureTextEntry
-                        />
-                    </View>
+                    <View style={styles.campuzinho}>
+                        <View style={styles.formulario}>
+                            <Text style={styles.texto_campo}>E-mail:</Text>
+                            <TextInput
+                                style={styles.campo}
+                                placeholder="Digite seu e-mail"
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                            <Text style={styles.texto_campo}>Senha:</Text>
+                            <TextInput
+                                style={styles.campo}
+                                placeholder="Digite sua senha (mín. 6 caracteres)"
+                                value={senha}
+                                onChangeText={setSenha}
+                                secureTextEntry
+                            />
+                        </View>
 
-                    {/* Botões de ação */}
-                    <TouchableOpacity
-                        style={[styles.botao, { backgroundColor: '#307C53' }]}
-                        onPress={handleCadastro}
-                    >
-                        <Text style={styles.texto_botao}>Cadastrar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.botao, { backgroundColor: '#273A57' }]}
-                        onPress={() => navigation.goBack()}
-                    >
-                        <Text style={styles.texto_botao}>Voltar</Text>
-                    </TouchableOpacity>
+                        {/* Botões de ação */}
+                        <TouchableOpacity
+                            style={[styles.botao, { backgroundColor: '#307C53' }]}
+                            onPress={handleCadastro}
+                        >
+                            <Text style={styles.texto_botao}>Cadastrar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.botao, { backgroundColor: '#273A57' }]}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Text style={styles.texto_botao}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
 
@@ -207,6 +209,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#85B542',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    
+    campuzinho: {
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        backgroundColor: '#fff',
+        marginHorizontal: 20,
+        marginVertical: 15,
+        borderRadius: 12,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 6,
+        elevation: 3,
     },
 });
 
