@@ -34,7 +34,7 @@ const Login = ({ navigation }) => {
                 // Aqui você pode salvar os dados em um contexto global se necessário
             }
 
-            navigation.navigate('PaginaPrincipal');
+            navigation.navigate('Pagina_Principal');
             
         } catch (error) {
             let errorMessage = 'Falha no login';

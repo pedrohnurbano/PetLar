@@ -10,14 +10,11 @@ const Pagina_Principal = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        // Verificar usuário logado
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setCurrentUser(user);
-                // Buscar dados do usuário no Firestore
                 await buscarDadosUsuario(user.uid);
             } else {
-                // Usuário não logado, redirecionar
                 navigation.navigate('Home');
             }
         });
@@ -28,11 +25,11 @@ const Pagina_Principal = ({ navigation }) => {
     const buscarDadosUsuario = async (uid) => {
         try {
             const q = query(
-                collection(db, 'usuarios'), 
+                collection(db, 'usuarios'),
                 where('uid', '==', uid)
             );
             const querySnapshot = await getDocs(q);
-            
+
             if (!querySnapshot.empty) {
                 const userData = querySnapshot.docs[0].data();
                 setUserData(userData);
@@ -56,8 +53,6 @@ const Pagina_Principal = ({ navigation }) => {
         <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.container}>
-
-                    {/* Cabeçalho */}
                     <View style={styles.cabecalho}>
                         <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
                         <Text style={styles.titulo_cabecalho}>PetLar</Text>
@@ -66,11 +61,15 @@ const Pagina_Principal = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Conteúdo principal */}
+                    <View>
+                        <Image
+                            source={require('../assets/anuncio.jpg')}
+                            style={{ width: '100%', height: 230 }}
+                        />
+                    </View>
+
                     <View style={styles.conteudo}>
                         <Text style={styles.titulo_principal}>Bem-vindo ao PetLar!</Text>
-                        
-                        {/* Exibir informações do usuário */}
                         {currentUser && (
                             <View style={styles.info_usuario}>
                                 <Text style={styles.email_usuario}>
@@ -83,32 +82,16 @@ const Pagina_Principal = ({ navigation }) => {
                                 )}
                             </View>
                         )}
-                        
-                        <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
 
-                        {/* Botões de ação principais */}
+                        <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
                         <View style={styles.container_botoes}>
-                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#307C53' }]}>
-                                <Text style={styles.texto_botao}>Ver Pets Disponíveis</Text>
-                            </TouchableOpacity>
-                            
-                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#273A57' }]}>
-                                <Text style={styles.texto_botao}>Cadastrar Pet</Text>
-                            </TouchableOpacity>
-                            
-                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#85B542' }]}>
-                                <Text style={styles.texto_botao}>Meu Perfil</Text>
-                            </TouchableOpacity>
-                            
                             <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
-                                <Text style={styles.texto_botao}>Favoritos</Text>
+                                <Text style={styles.texto_botao}> Gerenciar Pets </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </ScrollView>
-
-            {/* Rodapé */}
             <View style={styles.rodape}>
                 <Text style={styles.texto_rodape}>© 2025 PetLar. Todos os direitos reservados.</Text>
             </View>
