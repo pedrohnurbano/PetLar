@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={[styles.botao, styles.botaoCadastro]}
-                            onPress={() => navigation.navigate('CadastroUsuario')}
+                            onPress={() => navigation.navigate('Cadastro_Usuario')}
                             accessibilityLabel="Criar nova conta"
                             accessibilityRole="button"
                         >
