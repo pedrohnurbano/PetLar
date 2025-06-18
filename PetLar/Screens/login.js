@@ -106,11 +106,18 @@ const Login = ({ navigation }) => {
                             <Text style={styles.texto_botao}>Entrar</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            style={[styles.botao, { backgroundColor: '#273A57' }]}
                             onPress={() => navigation.goBack()}
                         >
                             <Text style={styles.texto_botao}>Voltar</Text>
                         </TouchableOpacity>
+                        <View style={styles.row}>
+                        <Text style={styles.texto_cadastro}>Não tem uma conta? </Text>
+                            <TouchableOpacity 
+                                    onPress={() => navigation.navigate('Cadastro_Usuario')}
+                                >
+                                    <Text style={styles.texto_botao_cadastro}>Cadastre-se</Text>
+                                </TouchableOpacity>
+                    </View>
                     </View>
                 </View>
             </ScrollView>
@@ -127,6 +134,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
+    },
+    row: {
+        alignContent: 'center',
+        flexDirection: 'row'
+
     },
     // Cabeçalho sem logo:
     cabecalho: {
@@ -203,6 +215,10 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 3,
     },
+    texto_botao_cadastro: {
+        color: '#4682B4'
+
+    }
 });
 
 export default Login;
