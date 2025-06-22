@@ -23,11 +23,11 @@ const Login = ({ navigation }) => {
 
             // Opcional: Buscar dados adicionais do usuário no Firestore
             const q = query(
-                collection(db, 'usuarios'), 
+                collection(db, 'usuarios'),
                 where('uid', '==', user.uid)
             );
             const querySnapshot = await getDocs(q);
-            
+
             if (!querySnapshot.empty) {
                 const userData = querySnapshot.docs[0].data();
                 console.log('Dados do usuário do Firestore:', userData);
@@ -35,10 +35,10 @@ const Login = ({ navigation }) => {
             }
 
             navigation.navigate('Pagina_Principal');
-            
+
         } catch (error) {
             let errorMessage = 'Falha no login';
-            
+
             // Tratamento de erros específicos
             switch (error.code) {
                 case 'auth/user-not-found':
@@ -56,7 +56,7 @@ const Login = ({ navigation }) => {
                 default:
                     errorMessage = error.message;
             }
-            
+
             Alert.alert('Erro', errorMessage);
             console.error('Erro no login:', error);
         }
@@ -68,11 +68,11 @@ const Login = ({ navigation }) => {
                 <View style={styles.container}>
 
                     {/* Cabeçalho sem logo */}
-                    <View style={styles.cabecalho}/>
+                    <View style={styles.cabecalho} />
 
                     {/* Logo */}
-                    <Image style={styles.logo} source={require('../assets/logo.png')}/>
-                    
+                    <Image style={styles.logo} source={require('../assets/logo.png')} />
+
                     {/* Título em texto */}
                     <Text style={styles.titulo}>Entre em sua conta</Text>
 
@@ -80,8 +80,8 @@ const Login = ({ navigation }) => {
                     <View style={styles.campuzinho}>
                         <View style={styles.formulario}>
                             <Text style={styles.texto_campo}>E-mail:</Text>
-                            <TextInput 
-                                style={styles.campo} 
+                            <TextInput
+                                style={styles.campo}
                                 placeholder="Digite seu e-mail"
                                 value={email}
                                 onChangeText={setEmail}
@@ -89,8 +89,8 @@ const Login = ({ navigation }) => {
                                 autoCapitalize="none"
                             />
                             <Text style={styles.texto_campo}>Senha:</Text>
-                            <TextInput 
-                                style={styles.campo} 
+                            <TextInput
+                                style={styles.campo}
                                 placeholder="Digite sua senha"
                                 value={senha}
                                 onChangeText={setSenha}
@@ -99,31 +99,30 @@ const Login = ({ navigation }) => {
                         </View>
 
                         {/* Botões de ação */}
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={[styles.botao, { backgroundColor: '#307C53' }]}
                             onPress={handleLogin}
                         >
                             <Text style={styles.texto_botao}>Entrar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => navigation.goBack()}
                         >
                             <Text style={styles.texto_botao}>Voltar</Text>
                         </TouchableOpacity>
                         <View style={styles.row}>
-                        <Text style={styles.texto_cadastro}>Não tem uma conta? </Text>
-                            <TouchableOpacity 
-                                    onPress={() => navigation.navigate('Cadastro_Usuario')}
-                                >
-                                    <Text style={styles.texto_botao_cadastro}>Cadastre-se</Text>
-                                </TouchableOpacity>
-                    </View>
+                            <Text style={styles.texto_cadastro}>Não tem uma conta? </Text>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Cadastro_Usuario')}
+                            >
+                                <Text style={styles.texto_botao_cadastro}>Cadastre-se</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
+                {/* Rodapé */}
+                <View style={styles.rodape} />
             </ScrollView>
-
-            {/* Rodapé */}
-            <View style={styles.rodape}/>
         </View>
     );
 }

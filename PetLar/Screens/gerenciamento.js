@@ -16,7 +16,7 @@ const Gerenciamento = ({ navigation }) => {
         try {
             // Solicitar permissão para acessar a galeria
             const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            
+
             if (permissionResult.granted === false) {
                 Alert.alert('Permissão necessária', 'É necessário permitir acesso à galeria para selecionar uma foto.');
                 return;
@@ -44,7 +44,7 @@ const Gerenciamento = ({ navigation }) => {
         try {
             const response = await fetch(uri);
             const blob = await response.blob();
-            
+
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
@@ -60,7 +60,7 @@ const Gerenciamento = ({ navigation }) => {
     // Função para cadastrar o pet
     const handleCadastro = async () => {
         console.log('=== INICIANDO CADASTRO DE PET ===');
-        
+
         if (!nome || !descricao || !contato) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
             return;
@@ -73,17 +73,17 @@ const Gerenciamento = ({ navigation }) => {
 
         try {
             setUploading(true);
-            
+
             let imagemBase64 = null;
-            
+
             if (imagemUri) {
                 console.log('Convertendo imagem para base64...');
                 imagemBase64 = await converterImagemParaBase64(imagemUri);
                 console.log('✅ Imagem convertida para base64');
             }
-            
+
             console.log('Salvando dados no Firestore...');
-            
+
             // Salvar dados do pet no Firestore
             const docRef = await addDoc(collection(db, 'pets'), {
                 nome: nome,
@@ -119,14 +119,14 @@ const Gerenciamento = ({ navigation }) => {
 
         } catch (error) {
             console.error('❌ Erro no cadastro:', error);
-            
+
             let errorMessage = 'Erro ao cadastrar pet';
             if (error.message.includes('base64')) {
                 errorMessage = 'Erro ao processar a imagem';
             } else if (error.message.includes('firestore')) {
                 errorMessage = 'Erro ao salvar dados';
             }
-            
+
             Alert.alert('Erro', errorMessage);
         } finally {
             setUploading(false);
@@ -137,27 +137,27 @@ const Gerenciamento = ({ navigation }) => {
         <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
             <ScrollView>
                 <View style={styles.container}>
-                    
+
                     {/* Cabeçalho */}
                     <View style={styles.cabecalho}>
-                        <Image 
-                            source={require('../assets/logo_circulo.png')} 
-                            style={styles.logoHeader} 
+                        <Image
+                            source={require('../assets/logo_circulo.png')}
+                            style={styles.logoHeader}
                         />
                     </View>
 
                     {/* Logo principal */}
                     <View style={styles.logoContainer}>
-                        <Image 
-                            source={require('../assets/logo.png')} 
-                            style={styles.logo} 
+                        <Image
+                            source={require('../assets/logo.png')}
+                            style={styles.logo}
                         />
                         <Text style={styles.titulo}>Cadastre seu animal para adoção</Text>
                     </View>
 
                     {/* Formulário */}
                     <View style={styles.formulario}>
-                        
+
                         {/* Campo Nome */}
                         <Text style={styles.textoLabel}>Nome:</Text>
                         <TextInput
@@ -191,13 +191,13 @@ const Gerenciamento = ({ navigation }) => {
 
                         {/* Seleção de Imagem */}
                         <Text style={styles.textoLabel}>Foto do Pet:</Text>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={styles.botaoImagem}
                             onPress={selecionarImagem}
                         >
                             {imagemUri ? (
-                                <Image 
-                                    source={{ uri: imagemUri }} 
+                                <Image
+                                    source={{ uri: imagemUri }}
                                     style={styles.imagemPreview}
                                 />
                             ) : (
@@ -231,10 +231,9 @@ const Gerenciamento = ({ navigation }) => {
                     </TouchableOpacity>
 
                 </View>
+                {/* Rodapé */}
+                <View style={styles.rodape} />
             </ScrollView>
-
-            {/* Rodapé */}
-            <View style={styles.rodape} />
         </View>
     );
 };
@@ -245,7 +244,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
     },
-    
+
     // Cabeçalho
     cabecalho: {
         width: '100%',
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
         width: 46,
         height: 46,
     },
-    
+
     // Logo e título
     logoContainer: {
         alignItems: 'center',
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginHorizontal: 20,
     },
-    
+
     // Formulário
     formulario: {
         width: '100%',
@@ -304,7 +303,7 @@ const styles = StyleSheet.create({
         height: 100,
         paddingTop: 12,
     },
-    
+
     // Seleção de imagem
     botaoImagem: {
         width: '100%',
@@ -332,7 +331,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
     },
-    
+
     // Botões
     botao: {
         width: 312,
@@ -353,7 +352,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    
+
     // Rodapé
     rodape: {
         width: '100%',

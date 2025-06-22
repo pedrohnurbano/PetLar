@@ -130,16 +130,15 @@ const Cadastro_Usuario = ({ navigation }) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.botao, { backgroundColor: '#273A57' }]}
-                            onPress={() => navigation.goBack()}
+                            onPress={() => navigation.navigate('Home')}
                         >
                             <Text style={styles.texto_botao}>Voltar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
+                {/* Rodapé */}
+                <View style={styles.rodape} />
             </ScrollView>
-
-            {/* Rodapé */}
-            <View style={styles.rodape} />
         </View>
     );
 }
@@ -210,7 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    
+
     campuzinho: {
         paddingHorizontal: 20,
         paddingVertical: 15,

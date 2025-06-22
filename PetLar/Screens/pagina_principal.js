@@ -86,14 +86,38 @@ const Pagina_Principal = ({ navigation }) => {
                         <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
                         <View style={styles.container_botoes}>
                             <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
-                                <Text style={styles.texto_botao}> Gerenciar Pets </Text>
+                                <Text style={styles.texto_botao}
+                                    onPress={() => navigation.navigate('Gerenciamento')}
+                                > Gerenciar Pets </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </ScrollView>
-            <View style={styles.rodape}>
-                <Text style={styles.texto_rodape}>© 2025 PetLar. Todos os direitos reservados.</Text>
+            
+            {/* Bottom Tab Navigation */}
+            <View style={styles.bottomTab}>
+                <TouchableOpacity 
+                    style={[styles.tabItem, styles.activeTab]}
+                    onPress={() => navigation.navigate('Pagina_Principal')}
+                >
+                    <View style={styles.homeIcon}>
+                        <View style={styles.homeIconShape}></View>
+                        <View style={styles.homeIconRoof}></View>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.tabItem}
+                    onPress={() => navigation.navigate('Adocao')}
+                >
+                    <View style={styles.pawIcon}>
+                        <View style={styles.pawPad}></View>
+                        <View style={styles.pawToe1}></View>
+                        <View style={styles.pawToe2}></View>
+                        <View style={styles.pawToe3}></View>
+                        <View style={styles.pawToe4}></View>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -138,6 +162,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        paddingBottom: 80, // Espaço para o bottom tab
     },
     titulo_principal: {
         fontSize: 28,
@@ -194,16 +219,106 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'semibold',
     },
-    rodape: {
-        width: '100%',
-        height: 60,
-        backgroundColor: '#85B542',
+    // Bottom Tab Styles
+    bottomTab: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 70,
+        backgroundColor: '#284E73',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingHorizontal: 20,
+    },
+    tabItem: {
+        flex: 1,
+        height: 50,
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 10,
     },
-    texto_rodape: {
-        color: '#fff',
-        fontSize: 12,
+    activeTab: {
+        backgroundColor: '#85B542',
+    },
+    // Home Icon Styles
+    homeIcon: {
+        width: 24,
+        height: 24,
+        position: 'relative',
+    },
+    homeIconShape: {
+        width: 20,
+        height: 16,
+        backgroundColor: '#fff',
+        position: 'absolute',
+        bottom: 0,
+        left: 2,
+    },
+    homeIconRoof: {
+        width: 0,
+        height: 0,
+        borderLeftWidth: 12,
+        borderRightWidth: 12,
+        borderBottomWidth: 10,
+        borderLeftColor: 'transparent',
+        borderRightColor: 'transparent',
+        borderBottomColor: '#fff',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+    // Paw Icon Styles
+    pawIcon: {
+        width: 24,
+        height: 24,
+        position: 'relative',
+    },
+    pawPad: {
+        width: 12,
+        height: 10,
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        position: 'absolute',
+        bottom: 0,
+        left: 6,
+    },
+    pawToe1: {
+        width: 4,
+        height: 6,
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        position: 'absolute',
+        top: 2,
+        left: 4,
+    },
+    pawToe2: {
+        width: 4,
+        height: 8,
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        position: 'absolute',
+        top: 0,
+        left: 8,
+    },
+    pawToe3: {
+        width: 4,
+        height: 8,
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        position: 'absolute',
+        top: 0,
+        left: 12,
+    },
+    pawToe4: {
+        width: 4,
+        height: 6,
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        position: 'absolute',
+        top: 2,
+        right: 4,
     },
 });
 
