@@ -8,10 +8,10 @@ const Adocao = ({ navigation }) => {
             <View style={styles.content}>
                 {/* Seu conteúdo futuro vai aqui */}
             </View>
-            
+
             {/* Bottom Tab Navigation */}
             <View style={styles.bottomTab}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.tabItem}
                     onPress={() => navigation.navigate('Pagina_Principal')}
                 >
@@ -20,7 +20,7 @@ const Adocao = ({ navigation }) => {
                         <View style={styles.homeIconRoof}></View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.tabItem, styles.activeTab]}
                     onPress={() => navigation.navigate('Adocao')}
                 >

@@ -94,10 +94,10 @@ const Pagina_Principal = ({ navigation }) => {
                     </View>
                 </View>
             </ScrollView>
-            
+
             {/* Bottom Tab Navigation */}
             <View style={styles.bottomTab}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.tabItem, styles.activeTab]}
                     onPress={() => navigation.navigate('Pagina_Principal')}
                 >
@@ -106,7 +106,7 @@ const Pagina_Principal = ({ navigation }) => {
                         <View style={styles.homeIconRoof}></View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.tabItem}
                     onPress={() => navigation.navigate('Adocao')}
                 >
