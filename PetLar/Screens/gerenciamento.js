@@ -152,14 +152,14 @@ const Gerenciamento = ({ navigation }) => {
                             source={require('../assets/logo.png')}
                             style={styles.logo}
                         />
-                        <Text style={styles.titulo}>Cadastre seu animal para adoção</Text>
+                        <Text style={styles.titulo}> Cadastre seu animal para adoção </Text>
                     </View>
 
                     {/* Formulário */}
                     <View style={styles.formulario}>
 
                         {/* Campo Nome */}
-                        <Text style={styles.textoLabel}>Nome:</Text>
+                        <Text style={styles.textoLabel}> Nome: </Text>
                         <TextInput
                             style={styles.campo}
                             placeholder="Digite o nome do animal"
@@ -168,7 +168,7 @@ const Gerenciamento = ({ navigation }) => {
                         />
 
                         {/* Campo Descrição */}
-                        <Text style={styles.textoLabel}>Descrição:</Text>
+                        <Text style={styles.textoLabel}> Descrição: </Text>
                         <TextInput
                             style={[styles.campo, styles.campoDescricao]}
                             placeholder="Fale um pouco sobre o animal, personalidade, cuidados especiais..."
@@ -180,7 +180,7 @@ const Gerenciamento = ({ navigation }) => {
                         />
 
                         {/* Campo Contato */}
-                        <Text style={styles.textoLabel}>Contato:</Text>
+                        <Text style={styles.textoLabel}> Contato: </Text>
                         <TextInput
                             style={styles.campo}
                             placeholder="DDD + Número: Ex: 11912345678"
@@ -190,7 +190,7 @@ const Gerenciamento = ({ navigation }) => {
                         />
 
                         {/* Seleção de Imagem */}
-                        <Text style={styles.textoLabel}>Foto do Pet:</Text>
+                        <Text style={styles.textoLabel}> Foto do Pet: </Text>
                         <TouchableOpacity
                             style={styles.botaoImagem}
                             onPress={selecionarImagem}

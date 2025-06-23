@@ -1,9 +1,9 @@
-import React, { useState                                                          } from 'react'             ;
-import        { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'      ;
-import        { signInWithEmailAndPassword                                        } from 'firebase/auth'     ;
-import        { collection, query, where, getDocs                                 } from 'firebase/firestore';
-import        { auth, db                                                          } from '../firebase/config';
-import        { ScrollView                                                        } from 'react-native-web'  ;
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
+import { ScrollView } from 'react-native-web';
 
 /* Home - Tela 02 - Cabeçalho/Logo/Título/Formulário/Botões/Rodapé */
 const Login = ({ navigation }) => {
@@ -12,17 +12,16 @@ const Login = ({ navigation }) => {
 
     // Função para lidar com o login
     const handleLogin = async () => {
-        if (!email || !senha) 
-        {
+        if (!email || !senha) {
             Alert.alert('Erro', 'Por gentileza, preencha todos os campos.');
-            return                                                         ;
+            return;
         }
 
         try {
             // Realizar login com e-mail e senha
             const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-            const user           = userCredential.user                                 ;
-            console.log('Login realizado com sucesso:', user.uid)                      ;
+            const user = userCredential.user;
+            console.log('Login realizado com sucesso:', user.uid);
 
             // Buscar dados do usuário no Firestore
             const q = query(
@@ -32,29 +31,28 @@ const Login = ({ navigation }) => {
             const querySnapshot = await getDocs(q);
 
             // Verificar se o usuário foi encontrado
-            if (!querySnapshot.empty) 
-            {
-                const userData = querySnapshot.docs[0].data()          ;
+            if (!querySnapshot.empty) {
+                const userData = querySnapshot.docs[0].data();
                 console.log('Dados do usuário do Firestore:', userData);
             }
             navigation.navigate('Pagina_Principal');
 
-        } 
+        }
         catch (error) {
             let errorMessage = 'Falha no login';
 
             // Tratamento de erros específicos
             switch (error.code) {
-                case 'auth/user-not-found'                 :
+                case 'auth/user-not-found':
                     errorMessage = 'Usuário não encontrado';
                     break;
-                case 'auth/wrong-password'          :
+                case 'auth/wrong-password':
                     errorMessage = 'Senha incorreta';
                     break;
-                case 'auth/invalid-email'          :
+                case 'auth/invalid-email':
                     errorMessage = 'Email inválido';
                     break;
-                case 'auth/too-many-requests'                                      :
+                case 'auth/too-many-requests':
                     errorMessage = 'Muitas tentativas. Tente novamente mais tarde!';
                     break;
                 default:
@@ -77,12 +75,12 @@ const Login = ({ navigation }) => {
                     <Image style={styles.logo} source={require('../assets/logo.png')} />
 
                     {/* Título em texto */}
-                    <Text style={styles.titulo}>Entre em sua conta</Text>
+                    <Text style={styles.titulo}> Entre em sua conta </Text>
 
                     {/* Campos de entrada */}
                     <View style={styles.campuzinho}>
                         <View style={styles.formulario}>
-                            <Text style={styles.texto_campo}>E-mail:</Text>
+                            <Text style={styles.texto_campo}> E-mail: </Text>
                             <TextInput
                                 style={styles.campo}
                                 placeholder="Digite seu e-mail"
@@ -91,10 +89,10 @@ const Login = ({ navigation }) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
-                            <Text style={styles.texto_campo}>Senha:</Text>
+                            <Text style={styles.texto_campo}> Senha: </Text>
                             <TextInput
                                 style={styles.campo}
-                                placeholder="Digite sua senha"
+                                placeholder="Digite sua senha (mín. 6 caracteres)"
                                 value={senha}
                                 onChangeText={setSenha}
                                 secureTextEntry
@@ -106,19 +104,21 @@ const Login = ({ navigation }) => {
                             style={[styles.botao, { backgroundColor: '#307C53' }]}
                             onPress={handleLogin}
                         >
-                            <Text style={styles.texto_botao}>Entrar</Text>
+                            <Text style={styles.texto_botao}> Entrar </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => navigation.goBack()}
                         >
-                            <Text style={styles.texto_botao}>Voltar</Text>
+                            <Text style={styles.texto_botao}> Voltar </Text>
                         </TouchableOpacity>
+
+                        {/* Ir para Cadastro */}
                         <View style={styles.row}>
-                            <Text style={styles.texto_cadastro}>Não tem uma conta? </Text>
+                            <Text style={styles.texto_cadastro}> Não tem uma conta? </Text>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('Cadastro_Usuario')}
                             >
-                                <Text style={styles.texto_botao_cadastro}>Cadastre-se</Text>
+                                <Text style={styles.texto_botao_cadastro}> Cadastre-se </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -138,9 +138,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     row: {
-        alignContent: 'center',
-        flexDirection: 'row'
-
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     // Cabeçalho sem logo:
     cabecalho: {
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     titulo: {
         fontSize: 20,
         color: '#307D53',
-        fontWeight: 'semibold',
+        fontWeight: 'bold',
         marginBottom: 16,
     },
     // Formulário:
@@ -185,15 +184,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        marginVertical: 8,
+        marginVertical: 10,
     },
-    texto_botao: {
+    texto_botao:
+    {
         color: '#fff',
         fontSize: 14,
         fontWeight: 'semibold',
     },
     // Rodapé:
-    rodape: {
+    rodape:
+    {
         width: 402,
         height: 60,
         backgroundColor: '#85B542',
@@ -201,7 +202,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     // Campuzinho
-    campuzinho: {
+    campuzinho:
+    {
         paddingHorizontal: 20,
         paddingVertical: 15,
         backgroundColor: '#fff',
@@ -209,7 +211,8 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         borderRadius: 12,
         shadowColor: '#000',
-        shadowOffset: {
+        shadowOffset:
+        {
             width: 0,
             height: 2,
         },
@@ -217,7 +220,8 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 3,
     },
-    texto_botao_cadastro: {
+    texto_botao_cadastro:
+    {
         color: '#4682B4'
 
     }

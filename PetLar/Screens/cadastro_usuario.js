@@ -97,12 +97,12 @@ const Cadastro_Usuario = ({ navigation }) => {
                     <Image style={styles.logo} source={require('../assets/logo.png')} />
 
                     {/* Título em texto */}
-                    <Text style={styles.titulo}>Cadastro de Usuário</Text>
+                    <Text style={styles.titulo}> Cadastro de Usuário </Text>
 
                     {/* Campos de entrada */}
                     <View style={styles.campuzinho}>
                         <View style={styles.formulario}>
-                            <Text style={styles.texto_campo}>E-mail:</Text>
+                            <Text style={styles.texto_campo}> E-mail: </Text>
                             <TextInput
                                 style={styles.campo}
                                 placeholder="Digite seu e-mail"
@@ -111,7 +111,7 @@ const Cadastro_Usuario = ({ navigation }) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
-                            <Text style={styles.texto_campo}>Senha:</Text>
+                            <Text style={styles.texto_campo}> Senha: </Text>
                             <TextInput
                                 style={styles.campo}
                                 placeholder="Digite sua senha (mín. 6 caracteres)"
@@ -126,14 +126,26 @@ const Cadastro_Usuario = ({ navigation }) => {
                             style={[styles.botao, { backgroundColor: '#307C53' }]}
                             onPress={handleCadastro}
                         >
-                            <Text style={styles.texto_botao}>Cadastrar</Text>
+                            <Text style={styles.texto_botao}> Cadastrar </Text>
                         </TouchableOpacity>
+                        
                         <TouchableOpacity
                             style={[styles.botao, { backgroundColor: '#273A57' }]}
                             onPress={() => navigation.navigate('Home')}
                         >
-                            <Text style={styles.texto_botao}>Voltar</Text>
+                            <Text style={styles.texto_botao}> Voltar </Text>
                         </TouchableOpacity>
+
+                        {/* Ir para Login */}
+                        <View style={styles.row}>
+                            <Text style={styles.texto_cadastro}> Já possui uma conta? </Text>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Login')}
+                            >
+                                <Text style={styles.texto_botao_cadastro}> Entre aqui </Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
                 </View>
                 {/* Rodapé */}
@@ -194,7 +206,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
-        marginVertical: 8,
+        marginVertical: 10,
     },
     texto_botao: {
         color: '#fff',
@@ -225,6 +237,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 6,
         elevation: 3,
+    },
+    texto_botao_cadastro:
+    {
+        color: '#4682B4'
+
+    },
+        row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native'                  ;
-import { SafeAreaView, SafeAreaProvider                                          } from 'react-native-safe-area-context';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -14,17 +14,17 @@ const Home = ({ navigation }) => {
                     {/* Cabeçalho com logo */}
                     <View style={styles.cabecalho}>
                         <Image
-                            source             = {require('../assets/logo_circulo.png')}
-                            style              = {styles.logo}
-                            accessibilityLabel = "Logo do PetLar"
+                            source={require('../assets/logo_circulo.png')}
+                            style={styles.logo}
+                            accessibilityLabel="Logo do PetLar"
                         />
                     </View>
 
                     {/* Imagem principal */}
                     <Image
-                        source             = {require('../assets/imagem_home.jpg')}
-                        style              = {styles.imagem}
-                        accessibilityLabel = "Família feliz com cachorro"
+                        source={require('../assets/imagem_home.jpg')}
+                        style={styles.imagem}
+                        accessibilityLabel="Família feliz com cachorro"
                     />
 
                     {/* Seção de benefícios */}
@@ -50,20 +50,20 @@ const Home = ({ navigation }) => {
                     <View style={styles.containerBotoes}>
                         {/* Botão de login */}
                         <TouchableOpacity
-                            style              = {[styles.botao, styles.botaoEntrar]}
-                            onPress            = {() => navigation.navigate('Login')}
-                            accessibilityLabel = "Entre em sua conta"
-                            accessibilityRole  = "button"
+                            style={[styles.botao, styles.botaoEntrar]}
+                            onPress={() => navigation.navigate('Login')}
+                            accessibilityLabel="Entre em sua conta"
+                            accessibilityRole="button"
                         >
                             <Text style={styles.texto_botao}> Acesse o Sistema </Text>
                         </TouchableOpacity>
 
                         {/* Botão de cadastro */}
                         <TouchableOpacity
-                            style              = {[styles.botao, styles.botaoCadastro         ]}
-                            onPress            = {() => navigation.navigate('Cadastro_Usuario')}
-                            accessibilityLabel = "Crie uma nova conta"
-                            accessibilityRole  = "button"
+                            style={[styles.botao, styles.botaoCadastro]}
+                            onPress={() => navigation.navigate('Cadastro_Usuario')}
+                            accessibilityLabel="Crie uma nova conta"
+                            accessibilityRole="button"
                         >
                             <Text style={styles.texto_botao}> Cadastre-se já! </Text>
                         </TouchableOpacity>
@@ -73,7 +73,7 @@ const Home = ({ navigation }) => {
                     <View style={styles.rodape}>
                         <Text style={styles.texto_rodape}> © 2025 PetLar. Todos os direitos reservados. </Text>
                     </View>
-                    
+
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
@@ -82,148 +82,148 @@ const Home = ({ navigation }) => {
 
 /* Corpo principal */
 const styles = StyleSheet.create({
-    container: 
+    container:
     {
-        flex           : 1        ,
+        flex: 1,
         backgroundColor: '#f5f5f5',
     },
-    scrollView: 
+    scrollView:
     {
         flex: 1,
     },
 
     /* Cabeçalho */
-    cabecalho: 
+    cabecalho:
     {
-        width          : '100%'   ,
-        height         : 60       ,
+        width: '100%',
+        height: 60,
         backgroundColor: '#284E73',
-        justifyContent : 'center' ,
-        alignItems     : 'center' ,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    logo: 
+    logo:
     {
-        width : 46,
+        width: 46,
         height: 46,
     },
 
     /* Imagem principal */
-    imagem: 
+    imagem:
     {
-        width     : '100%' ,
-        height    : 227    ,
+        width: '100%',
+        height: 227,
         resizeMode: 'cover',
     },
 
     /* Seção de benefícios */
-    containerBeneficios: 
+    containerBeneficios:
     {
-        paddingHorizontal: 20    ,
-        paddingVertical  : 15    ,
-        backgroundColor  : '#fff',
-        marginHorizontal : 20    ,
-        marginVertical   : 15    ,
-        borderRadius     : 12    ,
-        shadowColor      : '#000',
-        shadowOffset     : 
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        backgroundColor: '#fff',
+        marginHorizontal: 20,
+        marginVertical: 15,
+        borderRadius: 12,
+        shadowColor: '#000',
+        shadowOffset:
         {
-            width : 0,
+            width: 0,
             height: 2,
         },
         shadowOpacity: 0.1,
-        shadowRadius : 4  ,
-        elevation    : 3  ,
+        shadowRadius: 4,
+        elevation: 3,
     },
-    tituloBeneficios: 
+    tituloBeneficios:
     {
-        fontSize    : 16       ,
-        fontWeight  : 'bold'   ,
-        color       : '#284E73',
-        textAlign   : 'center' ,
-        marginBottom: 15       ,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#284E73',
+        textAlign: 'center',
+        marginBottom: 15,
     },
-    beneficio: 
+    beneficio:
     {
-        flexDirection: 'row'   ,
-        alignItems   : 'center',
-        marginBottom : 12      ,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
     },
-    iconeBeneficio: 
+    iconeBeneficio:
     {
-        width          : 32       ,
-        height         : 32       ,
-        borderRadius   : 16       ,
+        width: 32,
+        height: 32,
+        borderRadius: 16,
         backgroundColor: '#f0f8f0',
-        justifyContent : 'center' ,
-        alignItems     : 'center' ,
-        marginRight    : 12       ,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
     },
-    emoji: 
+    emoji:
     {
         fontSize: 16,
     },
-    textoBeneficio: 
+    textoBeneficio:
     {
-        flex      : 1     ,
-        fontSize  : 14    ,
-        color     : '#555',
-        lineHeight: 18    ,
+        flex: 1,
+        fontSize: 14,
+        color: '#555',
+        lineHeight: 18,
     },
 
     /* Botões de ação */
-    containerBotoes: 
+    containerBotoes:
     {
-        paddingHorizontal: 20      ,
-        alignItems       : 'center',
-        marginTop        : 10      ,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        marginTop: 10,
     },
-    botao: 
+    botao:
     {
         width: Math.min(312, screenWidth - 40),
-        height        : 48                    ,
-        justifyContent: 'center'              ,
-        alignItems    : 'center'              ,
-        borderRadius  : 24                    ,
-        marginVertical: 6                     ,
-        shadowColor   : '#000'                ,
-        shadowOffset  : 
+        height: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 24,
+        marginVertical: 6,
+        shadowColor: '#000',
+        shadowOffset:
         {
-            width : 0,
+            width: 0,
             height: 2,
         },
         shadowOpacity: 0.1,
-        shadowRadius : 3  ,
-        elevation    : 3  ,
+        shadowRadius: 3,
+        elevation: 3,
     },
-    botaoEntrar: 
+    botaoEntrar:
     {
         backgroundColor: '#307C53',
     },
-    botaoCadastro: 
+    botaoCadastro:
     {
         backgroundColor: '#273A57',
     },
-    texto_botao: 
+    texto_botao:
     {
-        color     : '#fff',
-        fontSize  : 14    ,
-        fontWeight: '600' ,
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '600',
     },
 
     /* Rodapé */
-    rodape: 
+    rodape:
     {
-        width          : '100%'   ,
-        height         : 60       ,
+        width: '100%',
+        height: 60,
         backgroundColor: '#85B542',
-        justifyContent : 'center' ,
-        alignItems     : 'center' ,
-        marginTop      : 20       ,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
     },
-    texto_rodape: 
+    texto_rodape:
     {
-        color   : '#fff',
-        fontSize: 12    ,
+        color: '#fff',
+        fontSize: 12,
     },
 });
 

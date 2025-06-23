@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    TouchableOpacity, 
-    Image, 
-    ScrollView, 
-    Alert,
-    Linking,
-    ActivityIndicator 
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, Linking, ActivityIndicator } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -62,7 +52,7 @@ const Pagina_Principal = ({ navigation }) => {
                 collection(db, 'pets'),
                 where('status', '==', 'disponivel')
             );
-            
+
             const querySnapshot = await getDocs(q);
             const petsData = [];
 
@@ -89,7 +79,7 @@ const Pagina_Principal = ({ navigation }) => {
         try {
             // Remove caracteres não numéricos do contato
             const numeroLimpo = contato.replace(/\D/g, '');
-            
+
             // Verifica se o número tem o formato correto
             if (numeroLimpo.length < 10) {
                 Alert.alert('Erro', 'Número de contato inválido');
@@ -104,20 +94,20 @@ const Pagina_Principal = ({ navigation }) => {
 
             // Mensagem pré-definida
             const mensagem = `Olá! Vi seu anúncio do ${nomePet} no PetLar e tenho interesse em adotar. Podemos conversar?`;
-            
+
             // Codifica a mensagem para URL
             const mensagemCodificada = encodeURIComponent(mensagem);
-            
+
             // Cria o link do WhatsApp
             const linkWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
-            
+
             console.log('Abrindo WhatsApp:', linkWhatsApp);
-            
+
             // Abre o WhatsApp
             Linking.openURL(linkWhatsApp).catch((error) => {
                 console.error('Erro ao abrir WhatsApp:', error);
                 Alert.alert(
-                    'Erro', 
+                    'Erro',
                     'Não foi possível abrir o WhatsApp. Verifique se o aplicativo está instalado.'
                 );
             });
@@ -131,13 +121,13 @@ const Pagina_Principal = ({ navigation }) => {
     // Função para formatar o número de telefone
     const formatarTelefone = (numero) => {
         const numeroLimpo = numero.replace(/\D/g, '');
-        
+
         if (numeroLimpo.length === 11) {
             return `(${numeroLimpo.slice(0, 2)}) ${numeroLimpo.slice(2, 7)}-${numeroLimpo.slice(7)}`;
         } else if (numeroLimpo.length === 10) {
             return `(${numeroLimpo.slice(0, 2)}) ${numeroLimpo.slice(2, 6)}-${numeroLimpo.slice(6)}`;
         }
-        
+
         return numero;
     };
 
@@ -146,8 +136,8 @@ const Pagina_Principal = ({ navigation }) => {
             {/* Imagem do Pet */}
             <View style={styles.imagemContainer}>
                 {pet.imagemBase64 ? (
-                    <Image 
-                        source={{ uri: pet.imagemBase64 }} 
+                    <Image
+                        source={{ uri: pet.imagemBase64 }}
                         style={styles.imagemPet}
                         resizeMode="cover"
                     />
@@ -164,9 +154,9 @@ const Pagina_Principal = ({ navigation }) => {
                 <Text style={styles.descricaoPet} numberOfLines={3}>
                     {pet.descricao}
                 </Text>
-                
+
                 {/* Botão de Contato */}
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.botaoContato}
                     onPress={() => abrirWhatsApp(pet.contato, pet.nome)}
                 >
@@ -208,21 +198,9 @@ const Pagina_Principal = ({ navigation }) => {
 
                     <View style={styles.conteudo}>
                         <Text style={styles.titulo_principal}>Bem-vindo ao PetLar!</Text>
-                        {currentUser && (
-                            <View style={styles.info_usuario}>
-                                <Text style={styles.email_usuario}>
-                                    Logado como: {currentUser.email}
-                                </Text>
-                                {userData && userData.dataCriacao && (
-                                    <Text style={styles.data_cadastro}>
-                                        Membro desde: {new Date(userData.dataCriacao).toLocaleDateString('pt-BR')}
-                                    </Text>
-                                )}
-                            </View>
-                        )}
 
                         <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
-                        
+
                         {/* Lista de Pets Disponíveis */}
                         <View style={styles.petsSection}>
                             {loadingPets ? (
@@ -246,7 +224,7 @@ const Pagina_Principal = ({ navigation }) => {
                         </View>
 
                         <View style={styles.container_botoes}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={[styles.botao, { backgroundColor: '#284E73' }]}
                                 onPress={() => navigation.navigate('Gerenciamento')}
                             >
@@ -256,10 +234,10 @@ const Pagina_Principal = ({ navigation }) => {
                     </View>
                 </View>
             </ScrollView>
-            
+
             {/* Bottom Tab Navigation */}
             <View style={styles.bottomTab}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.tabItem, styles.activeTab]}
                     onPress={() => navigation.navigate('Pagina_Principal')}
                 >
@@ -268,7 +246,7 @@ const Pagina_Principal = ({ navigation }) => {
                         <View style={styles.homeIconRoof}></View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.tabItem}
                     onPress={() => navigation.navigate('Adocao')}
                 >
@@ -356,7 +334,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
     },
-    
+
     // Seção de Pets
     petsSection: {
         width: '100%',
@@ -365,7 +343,7 @@ const styles = StyleSheet.create({
     petsContainer: {
         width: '100%',
     },
-    
+
     // Loading
     loadingContainer: {
         alignItems: 'center',
