@@ -223,13 +223,24 @@ const Pagina_Principal = ({ navigation }) => {
                             )}
                         </View>
 
-                        <View style={styles.container_botoes}>
-                            <TouchableOpacity
-                                style={[styles.botao, { backgroundColor: '#284E73' }]}
-                                onPress={() => navigation.navigate('Gerenciamento')}
-                            >
-                                <Text style={styles.texto_botao}>Gerenciar Pets</Text>
-                            </TouchableOpacity>
+                        {/* Seção de Doação */}
+                        <View style={styles.container_doacao}>
+                            <View style={styles.card_doacao}>
+                                <View style={styles.doacao_header}>
+                                    <View style={styles.qrCodeContainer}>
+                                        <View style={styles.qrCode}>
+                                            <Text style={styles.qrCodeText}>QR</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.doacao_texto}>
+                                        <Text style={styles.doacao_titulo}>DOAÇÂO VOLUNTÁRIA</Text>
+                                        <Text style={styles.doacao_subtitulo}>
+                                            Ajude nossos amiguinhos a encontrar um lar cheio de amor
+                                        </Text>
+                                        <Text style={styles.chave_doacao}>Chave pix para doação: 123.456.789-00</Text>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -453,11 +464,67 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-    container_botoes: {
+    // Seção de Doação
+    container_doacao: {
         width: '100%',
-        alignItems: 'center',
         marginTop: 20,
     },
+    card_doacao: {
+        width: '100%',
+        backgroundColor: '#4A90E2',
+        borderRadius: 15,
+        padding: 15,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    doacao_header: {
+        flexDirection: 'row',
+        marginBottom: 12,
+    },
+    qrCodeContainer: {
+        marginRight: 12,
+    },
+    qrCode: {
+        width: 50,
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    qrCodeText: {
+        color: '#000',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    doacao_texto: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    doacao_titulo: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 4,
+    },
+    doacao_subtitulo: {
+        color: '#fff',
+        fontSize: 12,
+        lineHeight: 16,
+        marginBottom: 4,
+    },
+    chave_doacao: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '600',
+    },
+
     botao: {
         width: 280,
         height: 50,
@@ -479,6 +546,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'semibold',
     },
+    
     // Bottom Tab Styles
     bottomTab: {
         position: 'absolute',

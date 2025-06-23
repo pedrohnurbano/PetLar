@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const Adocao = ({ navigation }) => {
     return (
@@ -7,6 +7,16 @@ const Adocao = ({ navigation }) => {
             {/* Conteúdo da página de adoção aqui */}
             <View style={styles.content}>
                 {/* Seu conteúdo futuro vai aqui */}
+            </View>
+
+            {/* Botão Adicionar Pets */}
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.addPetButton}
+                    onPress={() => navigation.navigate('Gerenciamento')}
+                >
+                    <Text style={styles.addPetButtonText}>Adicionar Pets</Text>
+                </TouchableOpacity>
             </View>
 
             {/* Bottom Tab Navigation */}
@@ -33,6 +43,7 @@ const Adocao = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             </View>
+            
         </View>
     );
 };
@@ -44,7 +55,37 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingBottom: 70, // Espaço para o bottom tab
+        paddingBottom: 140, // Espaço para o botão e bottom tab
+    },
+    // Container do botão
+    buttonContainer: {
+        position: 'absolute',
+        bottom: 80, // 70px do bottom tab + 10px de margem
+        left: 20,
+        right: 20,
+        alignItems: 'center',
+    },
+    // Botão Adicionar Pets
+    addPetButton: {
+        width: 280,
+        height: 50,
+        backgroundColor: '#284E73',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    addPetButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
     // Bottom Tab Styles
     bottomTab: {
