@@ -183,7 +183,7 @@ const Gerenciamento = ({ navigation }) => {
                         <Text style={styles.textoLabel}>Contato:</Text>
                         <TextInput
                             style={styles.campo}
-                            placeholder="Digite seu número de telefone"
+                            placeholder="DDD + Número: Ex: 11912345678"
                             value={contato}
                             onChangeText={setContato}
                             keyboardType="phone-pad"

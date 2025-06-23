@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    Image, 
+    ScrollView, 
+    Alert,
+    Linking,
+    ActivityIndicator 
+} from 'react-native';
 import { signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
-import { ScrollView } from 'react-native-web';
 
 const Pagina_Principal = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [pets, setPets] = useState([]);
+    const [loadingPets, setLoadingPets] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setCurrentUser(user);
                 await buscarDadosUsuario(user.uid);
+                await carregarPets(); // Carrega os pets quando o usuário está autenticado
             } else {
                 navigation.navigate('Home');
             }
@@ -39,6 +51,132 @@ const Pagina_Principal = ({ navigation }) => {
             console.error('Erro ao buscar dados do usuário:', error);
         }
     };
+
+    const carregarPets = async () => {
+        try {
+            setLoadingPets(true);
+            console.log('Carregando pets disponíveis...');
+
+            // Buscar todos os pets disponíveis
+            const q = query(
+                collection(db, 'pets'),
+                where('status', '==', 'disponivel')
+            );
+            
+            const querySnapshot = await getDocs(q);
+            const petsData = [];
+
+            querySnapshot.forEach((doc) => {
+                petsData.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+
+            console.log(`✅ ${petsData.length} pets encontrados`);
+            setPets(petsData);
+
+        } catch (error) {
+            console.error('❌ Erro ao carregar pets:', error);
+            Alert.alert('Erro', 'Não foi possível carregar os pets disponíveis');
+        } finally {
+            setLoadingPets(false);
+        }
+    };
+
+    // Função para abrir WhatsApp
+    const abrirWhatsApp = (contato, nomePet) => {
+        try {
+            // Remove caracteres não numéricos do contato
+            const numeroLimpo = contato.replace(/\D/g, '');
+            
+            // Verifica se o número tem o formato correto
+            if (numeroLimpo.length < 10) {
+                Alert.alert('Erro', 'Número de contato inválido');
+                return;
+            }
+
+            // Adiciona o código do país se não tiver (55 para Brasil)
+            let numeroCompleto = numeroLimpo;
+            if (!numeroCompleto.startsWith('55')) {
+                numeroCompleto = '55' + numeroCompleto;
+            }
+
+            // Mensagem pré-definida
+            const mensagem = `Olá! Vi seu anúncio do ${nomePet} no PetLar e tenho interesse em adotar. Podemos conversar?`;
+            
+            // Codifica a mensagem para URL
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            
+            // Cria o link do WhatsApp
+            const linkWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
+            
+            console.log('Abrindo WhatsApp:', linkWhatsApp);
+            
+            // Abre o WhatsApp
+            Linking.openURL(linkWhatsApp).catch((error) => {
+                console.error('Erro ao abrir WhatsApp:', error);
+                Alert.alert(
+                    'Erro', 
+                    'Não foi possível abrir o WhatsApp. Verifique se o aplicativo está instalado.'
+                );
+            });
+
+        } catch (error) {
+            console.error('Erro na função abrirWhatsApp:', error);
+            Alert.alert('Erro', 'Não foi possível abrir o contato');
+        }
+    };
+
+    // Função para formatar o número de telefone
+    const formatarTelefone = (numero) => {
+        const numeroLimpo = numero.replace(/\D/g, '');
+        
+        if (numeroLimpo.length === 11) {
+            return `(${numeroLimpo.slice(0, 2)}) ${numeroLimpo.slice(2, 7)}-${numeroLimpo.slice(7)}`;
+        } else if (numeroLimpo.length === 10) {
+            return `(${numeroLimpo.slice(0, 2)}) ${numeroLimpo.slice(2, 6)}-${numeroLimpo.slice(6)}`;
+        }
+        
+        return numero;
+    };
+
+    const renderPet = (pet) => (
+        <View key={pet.id} style={styles.petCard}>
+            {/* Imagem do Pet */}
+            <View style={styles.imagemContainer}>
+                {pet.imagemBase64 ? (
+                    <Image 
+                        source={{ uri: pet.imagemBase64 }} 
+                        style={styles.imagemPet}
+                        resizeMode="cover"
+                    />
+                ) : (
+                    <View style={styles.imagemPlaceholder}>
+                        <Text style={styles.textoPlaceholder}>📷</Text>
+                    </View>
+                )}
+            </View>
+
+            {/* Informações do Pet */}
+            <View style={styles.infoPet}>
+                <Text style={styles.nomePet}>{pet.nome}</Text>
+                <Text style={styles.descricaoPet} numberOfLines={3}>
+                    {pet.descricao}
+                </Text>
+                
+                {/* Botão de Contato */}
+                <TouchableOpacity 
+                    style={styles.botaoContato}
+                    onPress={() => abrirWhatsApp(pet.contato, pet.nome)}
+                >
+                    <Text style={styles.textoContato}>
+                        📱 {formatarTelefone(pet.contato)}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
 
     const handleLogout = async () => {
         try {
@@ -84,20 +222,44 @@ const Pagina_Principal = ({ navigation }) => {
                         )}
 
                         <Text style={styles.subtitulo}>Encontre seu companheiro perfeito</Text>
+                        
+                        {/* Lista de Pets Disponíveis */}
+                        <View style={styles.petsSection}>
+                            {loadingPets ? (
+                                <View style={styles.loadingContainer}>
+                                    <ActivityIndicator size="large" color="#284E73" />
+                                    <Text style={styles.loadingText}>Carregando pets...</Text>
+                                </View>
+                            ) : pets.length === 0 ? (
+                                <View style={styles.emptyContainer}>
+                                    <Text style={styles.emptyText}>🐾</Text>
+                                    <Text style={styles.emptyTitle}>Nenhum pet disponível</Text>
+                                    <Text style={styles.emptySubtitle}>
+                                        Seja o primeiro a cadastrar um pet para adoção!
+                                    </Text>
+                                </View>
+                            ) : (
+                                <View style={styles.petsContainer}>
+                                    {pets.map(renderPet)}
+                                </View>
+                            )}
+                        </View>
+
                         <View style={styles.container_botoes}>
-                            <TouchableOpacity style={[styles.botao, { backgroundColor: '#284E73' }]}>
-                                <Text style={styles.texto_botao}
-                                    onPress={() => navigation.navigate('Gerenciamento')}
-                                > Gerenciar Pets </Text>
+                            <TouchableOpacity 
+                                style={[styles.botao, { backgroundColor: '#284E73' }]}
+                                onPress={() => navigation.navigate('Gerenciamento')}
+                            >
+                                <Text style={styles.texto_botao}>Gerenciar Pets</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </ScrollView>
-
+            
             {/* Bottom Tab Navigation */}
             <View style={styles.bottomTab}>
-                <TouchableOpacity
+                <TouchableOpacity 
                     style={[styles.tabItem, styles.activeTab]}
                     onPress={() => navigation.navigate('Pagina_Principal')}
                 >
@@ -106,7 +268,7 @@ const Pagina_Principal = ({ navigation }) => {
                         <View style={styles.homeIconRoof}></View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity
+                <TouchableOpacity 
                     style={styles.tabItem}
                     onPress={() => navigation.navigate('Adocao')}
                 >
@@ -159,7 +321,7 @@ const styles = StyleSheet.create({
     },
     conteudo: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,
         paddingBottom: 80, // Espaço para o bottom tab
@@ -192,11 +354,131 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#666',
         textAlign: 'center',
-        marginBottom: 40,
+        marginBottom: 20,
     },
+    
+    // Seção de Pets
+    petsSection: {
+        width: '100%',
+        marginBottom: 20,
+    },
+    petsContainer: {
+        width: '100%',
+    },
+    
+    // Loading
+    loadingContainer: {
+        alignItems: 'center',
+        paddingVertical: 30,
+    },
+    loadingText: {
+        marginTop: 10,
+        color: '#666',
+        fontSize: 16,
+    },
+
+    // Empty State
+    emptyContainer: {
+        alignItems: 'center',
+        paddingVertical: 30,
+    },
+    emptyText: {
+        fontSize: 50,
+        marginBottom: 15,
+    },
+    emptyTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#284E73',
+        marginBottom: 8,
+        textAlign: 'center',
+    },
+    emptySubtitle: {
+        fontSize: 14,
+        color: '#666',
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+
+    // Pet Card
+    petCard: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 5,
+        overflow: 'hidden',
+    },
+
+    // Imagem
+    imagemContainer: {
+        height: 200,
+        backgroundColor: '#f5f5f5',
+    },
+    imagemPet: {
+        width: '100%',
+        height: '100%',
+    },
+    imagemPlaceholder: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+    },
+    textoPlaceholder: {
+        fontSize: 40,
+        color: '#ccc',
+    },
+
+    // Info do Pet
+    infoPet: {
+        padding: 15,
+    },
+    nomePet: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#284E73',
+        marginBottom: 8,
+    },
+    descricaoPet: {
+        fontSize: 14,
+        color: '#666',
+        lineHeight: 20,
+        marginBottom: 15,
+    },
+
+    // Botão de Contato
+    botaoContato: {
+        backgroundColor: '#25D366', // Cor do WhatsApp
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 25,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    textoContato: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+
     container_botoes: {
         width: '100%',
         alignItems: 'center',
+        marginTop: 20,
     },
     botao: {
         width: 280,
