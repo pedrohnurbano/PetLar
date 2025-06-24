@@ -48,7 +48,7 @@ const Home = ({ navigation }) => {
 
                     {/* Botões de ação */}
                     <View style={styles.containerBotoes}>
-                        {/* Botão de login */}
+                        
                         <TouchableOpacity
                             style={[styles.botao, styles.botaoEntrar]}
                             onPress={() => navigation.navigate('Login')}
@@ -58,7 +58,6 @@ const Home = ({ navigation }) => {
                             <Text style={styles.texto_botao}> Acesse o Sistema </Text>
                         </TouchableOpacity>
 
-                        {/* Botão de cadastro */}
                         <TouchableOpacity
                             style={[styles.botao, styles.botaoCadastro]}
                             onPress={() => navigation.navigate('Cadastro_Usuario')}
@@ -80,44 +79,38 @@ const Home = ({ navigation }) => {
     );
 };
 
-/* Corpo principal */
+// Estilos principais e containers
 const styles = StyleSheet.create({
-    container:
-    {
+    container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
     },
-    scrollView:
-    {
+    scrollView: {
         flex: 1,
     },
 
-    /* Cabeçalho */
-    cabecalho:
-    {
+    // Cabeçalho e logo
+    cabecalho: {
         width: '100%',
         height: 60,
         backgroundColor: '#284E73',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    logo:
-    {
+    logo: {
         width: 46,
         height: 46,
     },
 
-    /* Imagem principal */
-    imagem:
-    {
+    // Imagem principal
+    imagem: {
         width: '100%',
         height: 227,
         resizeMode: 'cover',
     },
 
-    /* Seção de benefícios */
-    containerBeneficios:
-    {
+    // Benefícios
+    containerBeneficios: {
         paddingHorizontal: 20,
         paddingVertical: 15,
         backgroundColor: '#fff',
@@ -125,8 +118,7 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         borderRadius: 12,
         shadowColor: '#000',
-        shadowOffset:
-        {
+        shadowOffset: {
             width: 0,
             height: 2,
         },
@@ -134,22 +126,19 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
-    tituloBeneficios:
-    {
+    tituloBeneficios: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#284E73',
         textAlign: 'center',
         marginBottom: 15,
     },
-    beneficio:
-    {
+    beneficio: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 12,
     },
-    iconeBeneficio:
-    {
+    iconeBeneficio: {
         width: 32,
         height: 32,
         borderRadius: 16,
@@ -158,27 +147,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 12,
     },
-    emoji:
-    {
+    emoji: {
         fontSize: 16,
     },
-    textoBeneficio:
-    {
+    textoBeneficio: {
         flex: 1,
         fontSize: 14,
         color: '#555',
         lineHeight: 18,
     },
 
-    /* Botões de ação */
-    containerBotoes:
-    {
+    // Botões de ação
+    containerBotoes: {
         paddingHorizontal: 20,
         alignItems: 'center',
         marginTop: 10,
     },
-    botao:
-    {
+    botao: {
         width: Math.min(312, screenWidth - 40),
         height: 48,
         justifyContent: 'center',
@@ -186,8 +171,7 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         marginVertical: 6,
         shadowColor: '#000',
-        shadowOffset:
-        {
+        shadowOffset: {
             width: 0,
             height: 2,
         },
@@ -195,24 +179,20 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 3,
     },
-    botaoEntrar:
-    {
+    botaoEntrar: {
         backgroundColor: '#307C53',
     },
-    botaoCadastro:
-    {
+    botaoCadastro: {
         backgroundColor: '#273A57',
     },
-    texto_botao:
-    {
+    texto_botao: {
         color: '#fff',
         fontSize: 14,
         fontWeight: '600',
     },
 
-    /* Rodapé */
-    rodape:
-    {
+    // Rodapé
+    rodape: {
         width: '100%',
         height: 60,
         backgroundColor: '#85B542',
@@ -220,8 +200,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
     },
-    texto_rodape:
-    {
+    texto_rodape: {
         color: '#fff',
         fontSize: 12,
     },

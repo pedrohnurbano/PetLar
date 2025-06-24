@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    Text,
-    Image,
-    ScrollView,
-    ActivityIndicator,
-    Modal,
-    TextInput,
-    KeyboardAvoidingView,
-    Platform
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image, ScrollView, ActivityIndicator, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 
 const Adocao = ({ navigation }) => {
+    // ============================================
+    // ESTADOS PRINCIPAIS DO COMPONENTE
+    // ============================================
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
 
-    // Estados para o modal de edição
+    // Estados para controle do modal de edição
     const [modalVisible, setModalVisible] = useState(false);
     const [petEditando, setPetEditando] = useState(null);
     const [nomeEdit, setNomeEdit] = useState('');
@@ -29,6 +20,9 @@ const Adocao = ({ navigation }) => {
     const [contatoEdit, setContatoEdit] = useState('');
     const [salvandoEdicao, setSalvandoEdicao] = useState(false);
 
+    // ============================================
+    // EFEITO PARA AUTENTICAÇÃO E CARREGAMENTO INICIAL
+    // ============================================
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -41,10 +35,12 @@ const Adocao = ({ navigation }) => {
         return () => unsubscribe();
     }, []);
 
+    // ============================================
+    // FUNÇÃO PARA CARREGAR PETS DO USUÁRIO LOGADO
+    // ============================================
     const carregarPetsUsuario = async (uid) => {
         try {
             setLoading(true);
-            // Busca pets cadastrados pelo usuário logado e disponíveis
             const q = query(
                 collection(db, 'pets'),
                 where('userId', '==', uid),
@@ -66,6 +62,9 @@ const Adocao = ({ navigation }) => {
         }
     };
 
+    // ============================================
+    // FUNÇÃO PARA LOGOUT DO USUÁRIO
+    // ============================================
     const handleLogout = async () => {
         try {
             await signOut(auth);
@@ -75,7 +74,11 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // Função para abrir modal de edição
+    // ============================================
+    // FUNÇÕES DE CONTROLE DO MODAL DE EDIÇÃO
+    // ============================================
+    
+    // Abrir modal de edição com dados do pet selecionado
     const abrirModalEdicao = (pet) => {
         setPetEditando(pet);
         setNomeEdit(pet.nome);
@@ -84,7 +87,7 @@ const Adocao = ({ navigation }) => {
         setModalVisible(true);
     };
 
-    // Função para fechar modal de edição
+    // Fechar modal e limpar estados
     const fecharModalEdicao = () => {
         setModalVisible(false);
         setPetEditando(null);
@@ -93,7 +96,9 @@ const Adocao = ({ navigation }) => {
         setContatoEdit('');
     };
 
-    // Função para salvar alterações
+    // ============================================
+    // FUNÇÃO PARA SALVAR ALTERAÇÕES DO PET
+    // ============================================
     const salvarAlteracoes = async () => {
         if (!nomeEdit.trim() || !descricaoEdit.trim() || !contatoEdit.trim()) {
             return;
@@ -102,7 +107,7 @@ const Adocao = ({ navigation }) => {
         try {
             setSalvandoEdicao(true);
 
-            // Atualizar no Firestore
+            // Atualizar dados no Firestore
             const petRef = doc(db, 'pets', petEditando.id);
             await updateDoc(petRef, {
                 nome: nomeEdit.trim(),
@@ -111,7 +116,7 @@ const Adocao = ({ navigation }) => {
                 dataAtualizacao: new Date().toISOString()
             });
 
-            // Atualizar estado local
+            // Atualizar estado local da lista de pets
             setPets(pets.map(pet =>
                 pet.id === petEditando.id
                     ? { ...pet, nome: nomeEdit.trim(), descricao: descricaoEdit.trim(), contato: contatoEdit.trim() }
@@ -127,13 +132,15 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // Função para excluir pet (sem confirmação)
+    // ============================================
+    // FUNÇÃO PARA EXCLUIR PET
+    // ============================================
     const excluirPet = async (pet) => {
         try {
-            // Excluir do Firestore
+            // Remover do Firestore
             await deleteDoc(doc(db, 'pets', pet.id));
 
-            // Atualizar estado local
+            // Atualizar lista local
             setPets(pets.filter(p => p.id !== pet.id));
 
         } catch (error) {
@@ -141,7 +148,9 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // Função para formatar telefone
+    // ============================================
+    // FUNÇÃO UTILITÁRIA PARA FORMATAÇÃO DE TELEFONE
+    // ============================================
     const formatarTelefone = (numero) => {
         const numeroLimpo = numero.replace(/\D/g, '');
         if (numeroLimpo.length === 11) {
@@ -152,8 +161,12 @@ const Adocao = ({ navigation }) => {
         return numero;
     };
 
+    // ============================================
+    // COMPONENTE DE RENDERIZAÇÃO DE CADA PET
+    // ============================================
     const renderPet = (pet) => (
         <View key={pet.id} style={styles.petCard}>
+            {/* Área da imagem do pet */}
             <View style={styles.imagemContainer}>
                 {pet.imagemBase64 ? (
                     <Image
@@ -167,17 +180,23 @@ const Adocao = ({ navigation }) => {
                     </View>
                 )}
             </View>
+            
+            {/* Informações do pet */}
             <View style={styles.infoPet}>
                 <Text style={styles.nomePet}>{pet.nome}</Text>
                 <Text style={styles.descricaoPet} numberOfLines={3}>
                     {pet.descricao}
                 </Text>
+                
+                {/* Container com contato e botões de ação */}
                 <View style={styles.contatoContainer}>
                     <View style={styles.contatoBox}>
                         <Text style={styles.textoContato}>
                             📱 {formatarTelefone(pet.contato)}
                         </Text>
                     </View>
+                    
+                    {/* Botões de editar e excluir */}
                     <View style={styles.botoesAcao}>
                         <TouchableOpacity
                             style={[styles.botaoAcao, styles.botaoEditar]}
@@ -197,9 +216,12 @@ const Adocao = ({ navigation }) => {
         </View>
     );
 
+    // ============================================
+    // RENDERIZAÇÃO DO COMPONENTE PRINCIPAL
+    // ============================================
     return (
         <View style={styles.container}>
-            {/* Cabeçalho igual ao da página principal */}
+            {/* CABEÇALHO DA APLICAÇÃO */}
             <View style={styles.cabecalho}>
                 <Image source={require('../assets/logo_circulo.png')} style={styles.logo} />
                 <Text style={styles.titulo_cabecalho}>PetLar</Text>
@@ -208,19 +230,24 @@ const Adocao = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
+            {/* CONTEÚDO PRINCIPAL - LISTA DE PETS */}
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.content}>
                     <Text style={styles.titulo}>Meus Pets para Adoção</Text>
                     <Text style={styles.subtitulo}>
                         Veja abaixo os pets que você cadastrou para adoção.
                     </Text>
+                    
+                    {/* Seção dos pets */}
                     <View style={styles.petsSection}>
                         {loading ? (
+                            // Estado de carregamento
                             <View style={styles.loadingContainer}>
                                 <ActivityIndicator size="large" color="#284E73" />
                                 <Text style={styles.loadingText}>Carregando pets...</Text>
                             </View>
                         ) : pets.length === 0 ? (
+                            // Estado vazio - nenhum pet cadastrado
                             <View style={styles.emptyContainer}>
                                 <Text style={styles.emptyText}>🐾</Text>
                                 <Text style={styles.emptyTitle}>Você ainda não cadastrou nenhum pet</Text>
@@ -229,6 +256,7 @@ const Adocao = ({ navigation }) => {
                                 </Text>
                             </View>
                         ) : (
+                            // Lista de pets cadastrados
                             <View style={styles.petsContainer}>
                                 {pets.map(renderPet)}
                             </View>
@@ -237,7 +265,7 @@ const Adocao = ({ navigation }) => {
                 </View>
             </ScrollView>
 
-            {/* Botão Adicionar Pets */}
+            {/* BOTÃO FIXO PARA ADICIONAR NOVOS PETS */}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.addPetButton}
@@ -247,7 +275,7 @@ const Adocao = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Modal de Edição */}
+            {/* MODAL DE EDIÇÃO DE PET */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -259,6 +287,7 @@ const Adocao = ({ navigation }) => {
                     style={styles.modalContainer}
                 >
                     <View style={styles.modalContent}>
+                        {/* Cabeçalho do modal */}
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalTitle}>Editar Pet</Text>
                             <TouchableOpacity
@@ -269,8 +298,8 @@ const Adocao = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
 
+                        {/* Formulário de edição */}
                         <ScrollView style={styles.modalBody}>
-                            {/* Campo Nome */}
                             <Text style={styles.labelModal}>Nome:</Text>
                             <TextInput
                                 style={styles.inputModal}
@@ -279,7 +308,6 @@ const Adocao = ({ navigation }) => {
                                 onChangeText={setNomeEdit}
                             />
 
-                            {/* Campo Descrição */}
                             <Text style={styles.labelModal}>Descrição:</Text>
                             <TextInput
                                 style={[styles.inputModal, styles.inputDescricao]}
@@ -291,7 +319,6 @@ const Adocao = ({ navigation }) => {
                                 textAlignVertical="top"
                             />
 
-                            {/* Campo Contato */}
                             <Text style={styles.labelModal}>Contato:</Text>
                             <TextInput
                                 style={styles.inputModal}
@@ -302,6 +329,7 @@ const Adocao = ({ navigation }) => {
                             />
                         </ScrollView>
 
+                        {/* Botões de ação do modal */}
                         <View style={styles.modalFooter}>
                             <TouchableOpacity
                                 style={[styles.botaoModal, styles.botaoCancelar]}
@@ -324,7 +352,7 @@ const Adocao = ({ navigation }) => {
                 </KeyboardAvoidingView>
             </Modal>
 
-            {/* Bottom Tab Navigation */}
+            {/* NAVEGAÇÃO INFERIOR (BOTTOM TAB) */}
             <View style={styles.bottomTab}>
                 <TouchableOpacity
                     style={styles.tabItem}
@@ -352,11 +380,17 @@ const Adocao = ({ navigation }) => {
     );
 };
 
+// ============================================
+// ESTILOS DO COMPONENTE
+// ============================================
 const styles = StyleSheet.create({
+    // Estilos principais do container
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
     },
+    
+    // Estilos do cabeçalho
     cabecalho: {
         width: 402,
         height: 60,
@@ -386,6 +420,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'semibold',
     },
+    
+    // Estilos do conteúdo principal
     content: {
         flex: 1,
         padding: 20,
@@ -405,6 +441,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 18,
     },
+    
+    // Estilos da seção de pets
     petsSection: {
         width: '100%',
         marginBottom: 20,
@@ -412,6 +450,8 @@ const styles = StyleSheet.create({
     petsContainer: {
         width: '100%',
     },
+    
+    // Estilos para estado de carregamento
     loadingContainer: {
         alignItems: 'center',
         paddingVertical: 30,
@@ -421,6 +461,8 @@ const styles = StyleSheet.create({
         color: '#666',
         fontSize: 16,
     },
+    
+    // Estilos para estado vazio
     emptyContainer: {
         alignItems: 'center',
         paddingVertical: 30,
@@ -442,6 +484,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         lineHeight: 20,
     },
+    
+    // Estilos dos cards de pets
     petCard: {
         backgroundColor: '#fff',
         borderRadius: 15,
@@ -489,6 +533,8 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         marginBottom: 15,
     },
+    
+    // Estilos do container de contato e ações
     contatoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -508,6 +554,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    
+    // Estilos dos botões de ação
     botoesAcao: {
         flexDirection: 'row',
         gap: 8,
@@ -537,6 +585,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#fff',
     },
+    
+    // Estilos do botão adicionar pets
     buttonContainer: {
         position: 'absolute',
         bottom: 80,
@@ -566,7 +616,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    // Estilos do Modal
+    // Estilos do modal de edição
     modalContainer: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -664,7 +714,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
 
-    // Bottom Tab Navigation
+    // Estilos da navegação inferior
     bottomTab: {
         position: 'absolute',
         bottom: 0,
@@ -687,6 +737,8 @@ const styles = StyleSheet.create({
     activeTab: {
         backgroundColor: '#85B542',
     },
+    
+    // Estilos dos ícones da navegação
     homeIcon: {
         width: 24,
         height: 24,

@@ -11,6 +11,17 @@ const Gerenciamento = ({ navigation }) => {
     const [imagemUri, setImagemUri] = useState(null);
     const [uploading, setUploading] = useState(false);
 
+    // Função para validar contato (apenas números, 11 dígitos)
+    const validarContato = (texto) => {
+        // Remove tudo que não for número
+        const apenasNumeros = texto.replace(/\D/g, '');
+        
+        // Limita a 11 dígitos
+        if (apenasNumeros.length <= 11) {
+            setContato(apenasNumeros);
+        }
+    };
+
     // Função para abrir a galeria e selecionar imagem
     const selecionarImagem = async () => {
         try {
@@ -66,6 +77,12 @@ const Gerenciamento = ({ navigation }) => {
             return;
         }
 
+        // Validação específica do contato
+        if (contato.length !== 11) {
+            Alert.alert('Erro', 'O contato deve ter exatamente 11 dígitos (DDD + número)');
+            return;
+        }
+
         if (!imagemUri) {
             Alert.alert('Erro', 'Por favor, selecione uma foto do pet');
             return;
@@ -98,24 +115,7 @@ const Gerenciamento = ({ navigation }) => {
 
             console.log('✅ Pet cadastrado no Firestore com ID:', docRef.id);
 
-            Alert.alert(
-                'Sucesso!',
-                'Pet cadastrado com sucesso para adoção!',
-                [
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            // Limpar formulário
-                            setNome('');
-                            setDescricao('');
-                            setContato('');
-                            setImagemUri(null);
-                            // Navegar de volta
-                            navigation.goBack();
-                        }
-                    }
-                ]
-            );
+            navigation.navigate('Adocao');
 
         } catch (error) {
             console.error('❌ Erro no cadastro:', error);
@@ -185,9 +185,15 @@ const Gerenciamento = ({ navigation }) => {
                             style={styles.campo}
                             placeholder="DDD + Número: Ex: 11912345678"
                             value={contato}
-                            onChangeText={setContato}
-                            keyboardType="phone-pad"
+                            onChangeText={validarContato}
+                            keyboardType="numeric"
+                            maxLength={11}
                         />
+                        {contato.length > 0 && contato.length < 11 && (
+                            <Text style={styles.textoValidacao}>
+                                {contato.length}/11 dígitos
+                            </Text>
+                        )}
 
                         {/* Seleção de Imagem */}
                         <Text style={styles.textoLabel}> Foto do Pet: </Text>
@@ -302,6 +308,14 @@ const styles = StyleSheet.create({
     campoDescricao: {
         height: 100,
         paddingTop: 12,
+    },
+
+    // Texto de validação
+    textoValidacao: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 3,
+        textAlign: 'right',
     },
 
     // Seleção de imagem
