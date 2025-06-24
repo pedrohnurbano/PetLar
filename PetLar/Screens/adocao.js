@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { 
+    View, 
+    StyleSheet, 
+    TouchableOpacity, 
+    Text, 
+    Image, 
+    ScrollView, 
+    ActivityIndicator, 
+    Modal,
+    TextInput,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
 import { signOut } from 'firebase/auth';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 
 const Adocao = ({ navigation }) => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
+    
+    // Estados para o modal de edição
+    const [modalVisible, setModalVisible] = useState(false);
+    const [petEditando, setPetEditando] = useState(null);
+    const [nomeEdit, setNomeEdit] = useState('');
+    const [descricaoEdit, setDescricaoEdit] = useState('');
+    const [contatoEdit, setContatoEdit] = useState('');
+    const [salvandoEdicao, setSalvandoEdicao] = useState(false);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -41,7 +61,6 @@ const Adocao = ({ navigation }) => {
             setPets(petsData);
         } catch (error) {
             console.error('Erro ao carregar pets do usuário:', error);
-            Alert.alert('Erro', 'Não foi possível carregar seus pets');
         } finally {
             setLoading(false);
         }
@@ -53,6 +72,72 @@ const Adocao = ({ navigation }) => {
             navigation.navigate('Home');
         } catch (error) {
             console.error('Erro ao fazer logout:', error);
+        }
+    };
+
+    // Função para abrir modal de edição
+    const abrirModalEdicao = (pet) => {
+        setPetEditando(pet);
+        setNomeEdit(pet.nome);
+        setDescricaoEdit(pet.descricao);
+        setContatoEdit(pet.contato);
+        setModalVisible(true);
+    };
+
+    // Função para fechar modal de edição
+    const fecharModalEdicao = () => {
+        setModalVisible(false);
+        setPetEditando(null);
+        setNomeEdit('');
+        setDescricaoEdit('');
+        setContatoEdit('');
+    };
+
+    // Função para salvar alterações
+    const salvarAlteracoes = async () => {
+        if (!nomeEdit.trim() || !descricaoEdit.trim() || !contatoEdit.trim()) {
+            return;
+        }
+
+        try {
+            setSalvandoEdicao(true);
+            
+            // Atualizar no Firestore
+            const petRef = doc(db, 'pets', petEditando.id);
+            await updateDoc(petRef, {
+                nome: nomeEdit.trim(),
+                descricao: descricaoEdit.trim(),
+                contato: contatoEdit.trim(),
+                dataAtualizacao: new Date().toISOString()
+            });
+
+            // Atualizar estado local
+            setPets(pets.map(pet => 
+                pet.id === petEditando.id 
+                    ? { ...pet, nome: nomeEdit.trim(), descricao: descricaoEdit.trim(), contato: contatoEdit.trim() }
+                    : pet
+            ));
+
+            fecharModalEdicao();
+
+        } catch (error) {
+            console.error('Erro ao atualizar pet:', error);
+        } finally {
+            setSalvandoEdicao(false);
+        }
+    };
+
+    // Função para excluir pet (sem confirmação)
+    const excluirPet = async (pet) => {
+        try {
+            // Excluir do Firestore
+            await deleteDoc(doc(db, 'pets', pet.id));
+            
+            // Atualizar estado local
+            setPets(pets.filter(p => p.id !== pet.id));
+            
+        } catch (error) {
+            console.error('Erro ao excluir pet:', error);
         }
     };
 
@@ -87,10 +172,26 @@ const Adocao = ({ navigation }) => {
                 <Text style={styles.descricaoPet} numberOfLines={3}>
                     {pet.descricao}
                 </Text>
-                <View style={styles.contatoBox}>
-                    <Text style={styles.textoContato}>
-                        📱 {formatarTelefone(pet.contato)}
-                    </Text>
+                <View style={styles.contatoContainer}>
+                    <View style={styles.contatoBox}>
+                        <Text style={styles.textoContato}>
+                            📱 {formatarTelefone(pet.contato)}
+                        </Text>
+                    </View>
+                    <View style={styles.botoesAcao}>
+                        <TouchableOpacity
+                            style={[styles.botaoAcao, styles.botaoEditar]}
+                            onPress={() => abrirModalEdicao(pet)}
+                        >
+                            <Text style={styles.textoBotaoAcao}>✏️</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.botaoAcao, styles.botaoExcluir]}
+                            onPress={() => excluirPet(pet)}
+                        >
+                            <Text style={styles.textoBotaoAcao}>🗑️</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </View>
@@ -106,6 +207,7 @@ const Adocao = ({ navigation }) => {
                     <Text style={styles.texto_logout}>Sair</Text>
                 </TouchableOpacity>
             </View>
+            
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.content}>
                     <Text style={styles.titulo}>Meus Pets para Adoção</Text>
@@ -144,6 +246,83 @@ const Adocao = ({ navigation }) => {
                     <Text style={styles.addPetButtonText}>Adicionar Pets</Text>
                 </TouchableOpacity>
             </View>
+
+            {/* Modal de Edição */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={fecharModalEdicao}
+            >
+                <KeyboardAvoidingView 
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.modalContainer}
+                >
+                    <View style={styles.modalContent}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Editar Pet</Text>
+                            <TouchableOpacity
+                                style={styles.botaoFechar}
+                                onPress={fecharModalEdicao}
+                            >
+                                <Text style={styles.textoFechar}>✕</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <ScrollView style={styles.modalBody}>
+                            {/* Campo Nome */}
+                            <Text style={styles.labelModal}>Nome:</Text>
+                            <TextInput
+                                style={styles.inputModal}
+                                placeholder="Digite o nome do animal"
+                                value={nomeEdit}
+                                onChangeText={setNomeEdit}
+                            />
+
+                            {/* Campo Descrição */}
+                            <Text style={styles.labelModal}>Descrição:</Text>
+                            <TextInput
+                                style={[styles.inputModal, styles.inputDescricao]}
+                                placeholder="Fale um pouco sobre o animal..."
+                                value={descricaoEdit}
+                                onChangeText={setDescricaoEdit}
+                                multiline={true}
+                                numberOfLines={4}
+                                textAlignVertical="top"
+                            />
+
+                            {/* Campo Contato */}
+                            <Text style={styles.labelModal}>Contato:</Text>
+                            <TextInput
+                                style={styles.inputModal}
+                                placeholder="DDD + Número: Ex: 11912345678"
+                                value={contatoEdit}
+                                onChangeText={setContatoEdit}
+                                keyboardType="phone-pad"
+                            />
+                        </ScrollView>
+
+                        <View style={styles.modalFooter}>
+                            <TouchableOpacity
+                                style={[styles.botaoModal, styles.botaoCancelar]}
+                                onPress={fecharModalEdicao}
+                                disabled={salvandoEdicao}
+                            >
+                                <Text style={styles.textoBotaoModal}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.botaoModal, styles.botaoSalvar]}
+                                onPress={salvarAlteracoes}
+                                disabled={salvandoEdicao}
+                            >
+                                <Text style={styles.textoBotaoModal}>
+                                    {salvandoEdicao ? 'Salvando...' : 'Salvar'}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </KeyboardAvoidingView>
+            </Modal>
 
             {/* Bottom Tab Navigation */}
             <View style={styles.bottomTab}>
@@ -310,18 +489,53 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         marginBottom: 15,
     },
+    contatoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     contatoBox: {
         backgroundColor: '#eee',
         paddingVertical: 8,
         paddingHorizontal: 15,
         borderRadius: 20,
-        alignItems: 'center',
-        alignSelf: 'flex-start',
+        flex: 1,
+        marginRight: 10,
     },
     textoContato: {
         color: '#284E73',
         fontSize: 14,
         fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    botoesAcao: {
+        flexDirection: 'row',
+        gap: 8,
+    },
+    botaoAcao: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    botaoEditar: {
+        backgroundColor: '#4CAF50',
+    },
+    botaoExcluir: {
+        backgroundColor: '#f44336',
+    },
+    textoBotaoAcao: {
+        fontSize: 16,
+        color: '#fff',
     },
     buttonContainer: {
         position: 'absolute',
@@ -351,6 +565,106 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
+
+    // Estilos do Modal
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        width: '90%',
+        maxHeight: '80%',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#284E73',
+    },
+    botaoFechar: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: '#f0f0f0',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    textoFechar: {
+        fontSize: 16,
+        color: '#666',
+        fontWeight: 'bold',
+    },
+    modalBody: {
+        padding: 20,
+        maxHeight: 400,
+    },
+    labelModal: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 8,
+        marginTop: 10,
+        fontWeight: '500',
+    },
+    inputModal: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        paddingVertical: 12,
+        fontSize: 16,
+        backgroundColor: '#fafafa',
+        marginBottom: 15,
+    },
+    inputDescricao: {
+        height: 100,
+        textAlignVertical: 'top',
+    },
+    modalFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+        gap: 10,
+    },
+    botaoModal: {
+        flex: 1,
+        paddingVertical: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    botaoCancelar: {
+        backgroundColor: '#ddd',
+    },
+    botaoSalvar: {
+        backgroundColor: '#284E73',
+    },
+    textoBotaoModal: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#fff',
+    },
+
+    // Bottom Tab Navigation
     bottomTab: {
         position: 'absolute',
         bottom: 0,

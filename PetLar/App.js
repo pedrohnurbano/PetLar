@@ -15,7 +15,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
-        initialRouteName="Adocao"
+        initialRouteName="Home"
         screenOptions={{
           headerShown: false,
         }}
