@@ -50,11 +50,7 @@ const Cadastro_Usuario = ({ navigation }) => {
 
             console.log('✅ Usuário salvo no Firestore com ID:', docRef.id);
 
-            Alert.alert(
-                'Sucesso',
-                'Conta criada com sucesso!',
-                [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
-            );
+            navigation.navigate('Login');
 
         } catch (error) {
             console.log('❌ ERRO NO CADASTRO:', error);
@@ -128,7 +124,7 @@ const Cadastro_Usuario = ({ navigation }) => {
                         >
                             <Text style={styles.texto_botao}> Cadastrar </Text>
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity
                             style={[styles.botao, { backgroundColor: '#273A57' }]}
                             onPress={() => navigation.navigate('Home')}
@@ -243,7 +239,7 @@ const styles = StyleSheet.create({
         color: '#4682B4'
 
     },
-        row: {
+    row: {
         flexDirection: 'row',
         justifyContent: 'center',
     },

@@ -106,7 +106,7 @@ const Login = ({ navigation }) => {
                         >
                             <Text style={styles.texto_botao}> Entrar </Text>
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity
                             style={[styles.botao, { backgroundColor: '#273A57' }]}
                             onPress={() => navigation.navigate('Home')}

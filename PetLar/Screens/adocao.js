@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    View, 
-    StyleSheet, 
-    TouchableOpacity, 
-    Text, 
-    Image, 
-    ScrollView, 
-    ActivityIndicator, 
+import {
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    Image,
+    ScrollView,
+    ActivityIndicator,
     Modal,
     TextInput,
     KeyboardAvoidingView,
@@ -20,7 +20,7 @@ const Adocao = ({ navigation }) => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
-    
+
     // Estados para o modal de edição
     const [modalVisible, setModalVisible] = useState(false);
     const [petEditando, setPetEditando] = useState(null);
@@ -101,7 +101,7 @@ const Adocao = ({ navigation }) => {
 
         try {
             setSalvandoEdicao(true);
-            
+
             // Atualizar no Firestore
             const petRef = doc(db, 'pets', petEditando.id);
             await updateDoc(petRef, {
@@ -112,8 +112,8 @@ const Adocao = ({ navigation }) => {
             });
 
             // Atualizar estado local
-            setPets(pets.map(pet => 
-                pet.id === petEditando.id 
+            setPets(pets.map(pet =>
+                pet.id === petEditando.id
                     ? { ...pet, nome: nomeEdit.trim(), descricao: descricaoEdit.trim(), contato: contatoEdit.trim() }
                     : pet
             ));
@@ -132,10 +132,10 @@ const Adocao = ({ navigation }) => {
         try {
             // Excluir do Firestore
             await deleteDoc(doc(db, 'pets', pet.id));
-            
+
             // Atualizar estado local
             setPets(pets.filter(p => p.id !== pet.id));
-            
+
         } catch (error) {
             console.error('Erro ao excluir pet:', error);
         }
@@ -207,7 +207,7 @@ const Adocao = ({ navigation }) => {
                     <Text style={styles.texto_logout}>Sair</Text>
                 </TouchableOpacity>
             </View>
-            
+
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.content}>
                     <Text style={styles.titulo}>Meus Pets para Adoção</Text>
@@ -254,7 +254,7 @@ const Adocao = ({ navigation }) => {
                 visible={modalVisible}
                 onRequestClose={fecharModalEdicao}
             >
-                <KeyboardAvoidingView 
+                <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     style={styles.modalContainer}
                 >
