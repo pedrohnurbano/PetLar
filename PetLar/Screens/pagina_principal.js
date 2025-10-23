@@ -63,11 +63,11 @@ const Pagina_Principal = ({ navigation }) => {
                 });
             });
 
-            console.log(`✅ ${petsData.length} pets encontrados`);
+            console.log(`${petsData.length} pets encontrados`);
             setPets(petsData);
 
         } catch (error) {
-            console.error('❌ Erro ao carregar pets:', error);
+            console.error('Erro ao carregar pets:', error);
             Alert.alert('Erro', 'Não foi possível carregar os pets disponíveis');
         } finally {
             setLoadingPets(false);
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,
-        paddingBottom: 80, // Espaço para o bottom tab
+        paddingBottom: 80,
     },
     titulo_principal: {
         fontSize: 28,
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
 
     // Botão de Contato
     botaoContato: {
-        backgroundColor: '#25D366', // Cor do WhatsApp
+        backgroundColor: '#25D366',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 25,

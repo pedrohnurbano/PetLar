@@ -5,7 +5,6 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { ScrollView } from 'react-native-web';
 
-/* Home - Tela 02 - Cabeçalho/Logo/Título/Formulário/Botões/Rodapé */
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');

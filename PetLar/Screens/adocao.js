@@ -5,9 +5,8 @@ import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'fi
 import { auth, db } from '../firebase/config';
 
 const Adocao = ({ navigation }) => {
-    // ============================================
     // ESTADOS PRINCIPAIS DO COMPONENTE
-    // ============================================
+
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
@@ -20,9 +19,7 @@ const Adocao = ({ navigation }) => {
     const [contatoEdit, setContatoEdit] = useState('');
     const [salvandoEdicao, setSalvandoEdicao] = useState(false);
 
-    // ============================================
     // EFEITO PARA AUTENTICAÇÃO E CARREGAMENTO INICIAL
-    // ============================================
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -35,9 +32,7 @@ const Adocao = ({ navigation }) => {
         return () => unsubscribe();
     }, []);
 
-    // ============================================
     // FUNÇÃO PARA CARREGAR PETS DO USUÁRIO LOGADO
-    // ============================================
     const carregarPetsUsuario = async (uid) => {
         try {
             setLoading(true);
@@ -62,9 +57,7 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // ============================================
     // FUNÇÃO PARA LOGOUT DO USUÁRIO
-    // ============================================
     const handleLogout = async () => {
         try {
             await signOut(auth);
@@ -74,9 +67,7 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // ============================================
     // FUNÇÕES DE CONTROLE DO MODAL DE EDIÇÃO
-    // ============================================
     
     // Abrir modal de edição com dados do pet selecionado
     const abrirModalEdicao = (pet) => {
@@ -96,9 +87,7 @@ const Adocao = ({ navigation }) => {
         setContatoEdit('');
     };
 
-    // ============================================
     // FUNÇÃO PARA SALVAR ALTERAÇÕES DO PET
-    // ============================================
     const salvarAlteracoes = async () => {
         if (!nomeEdit.trim() || !descricaoEdit.trim() || !contatoEdit.trim()) {
             return;
@@ -132,9 +121,7 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // ============================================
     // FUNÇÃO PARA EXCLUIR PET
-    // ============================================
     const excluirPet = async (pet) => {
         try {
             // Remover do Firestore
@@ -148,9 +135,7 @@ const Adocao = ({ navigation }) => {
         }
     };
 
-    // ============================================
     // FUNÇÃO UTILITÁRIA PARA FORMATAÇÃO DE TELEFONE
-    // ============================================
     const formatarTelefone = (numero) => {
         const numeroLimpo = numero.replace(/\D/g, '');
         if (numeroLimpo.length === 11) {
@@ -161,9 +146,7 @@ const Adocao = ({ navigation }) => {
         return numero;
     };
 
-    // ============================================
     // COMPONENTE DE RENDERIZAÇÃO DE CADA PET
-    // ============================================
     const renderPet = (pet) => (
         <View key={pet.id} style={styles.petCard}>
             {/* Área da imagem do pet */}
@@ -216,9 +199,7 @@ const Adocao = ({ navigation }) => {
         </View>
     );
 
-    // ============================================
     // RENDERIZAÇÃO DO COMPONENTE PRINCIPAL
-    // ============================================
     return (
         <View style={styles.container}>
             {/* CABEÇALHO DA APLICAÇÃO */}
@@ -380,9 +361,7 @@ const Adocao = ({ navigation }) => {
     );
 };
 
-// ============================================
 // ESTILOS DO COMPONENTE
-// ============================================
 const styles = StyleSheet.create({
     // Estilos principais do container
     container: {

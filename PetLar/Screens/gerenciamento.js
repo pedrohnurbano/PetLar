@@ -50,7 +50,7 @@ const Gerenciamento = ({ navigation }) => {
         }
     };
 
-    // Função para converter imagem para base64 (alternativa sem Storage)
+    // Função para converter imagem para base64
     const converterImagemParaBase64 = async (uri) => {
         try {
             const response = await fetch(uri);
@@ -70,7 +70,7 @@ const Gerenciamento = ({ navigation }) => {
 
     // Função para cadastrar o pet
     const handleCadastro = async () => {
-        console.log('=== INICIANDO CADASTRO DE PET ===');
+        console.log('Iniciando cadastro de pet...');
 
         if (!nome || !descricao || !contato) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
@@ -96,7 +96,7 @@ const Gerenciamento = ({ navigation }) => {
             if (imagemUri) {
                 console.log('Convertendo imagem para base64...');
                 imagemBase64 = await converterImagemParaBase64(imagemUri);
-                console.log('✅ Imagem convertida para base64');
+                console.log('Imagem convertida para base64');
             }
 
             console.log('Salvando dados no Firestore...');
@@ -113,12 +113,12 @@ const Gerenciamento = ({ navigation }) => {
                 status: 'disponivel' // disponivel, adotado, etc.
             });
 
-            console.log('✅ Pet cadastrado no Firestore com ID:', docRef.id);
+            console.log('Pet cadastrado no Firestore com ID:', docRef.id);
 
             navigation.navigate('Adocao');
 
         } catch (error) {
-            console.error('❌ Erro no cadastro:', error);
+            console.error('Erro no cadastro:', error);
 
             let errorMessage = 'Erro ao cadastrar pet';
             if (error.message.includes('base64')) {

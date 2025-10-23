@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app'      ;
 import { getAuth       } from 'firebase/auth'     ;
 import { getFirestore  } from 'firebase/firestore';
 
-// Suas configurações do Firebase (substitua pelos seus dados do Firebase Console)
+// Configurações do Firebase
 const firebaseConfig = {
   apiKey           : "AIzaSyD7ZJmTRut0Tvt3xsuGjhX2b8-MdKM3QtM"  ,
   authDomain       : "petlar-26711.firebaseapp.com"             ,
@@ -13,13 +13,13 @@ const firebaseConfig = {
   appId            : "1:405293208806:web:0b1afaef7395c517161727",
 };
 
-// Initialize Firebase
+// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
+// Inicializa o Firebase Authentication e obtém uma referência ao serviço
 export const auth = getAuth(app);
 
-// Initialize Cloud Firestore and get a reference to the service
+// Inicializa o Cloud Firestore e obtém uma referência ao serviço
 export const db = getFirestore(app);
 
 export default app;

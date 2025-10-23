@@ -16,8 +16,8 @@ const Cadastro_Usuario = ({ navigation }) => {
 
     // Verificação de conexão com Firebase ao carregar o componente
     React.useEffect(() => {
-        console.log('🔥 Firebase Auth:', auth ? 'Conectado' : 'Erro de conexão');
-        console.log('🔥 Firebase DB:', db ? 'Conectado' : 'Erro de conexão');
+        console.log('Firebase Auth:', auth ? 'Conectado' : 'Erro de conexão');
+        console.log('Firebase DB:', db ? 'Conectado' : 'Erro de conexão');
     }, []);
 
     /**
@@ -25,7 +25,7 @@ const Cadastro_Usuario = ({ navigation }) => {
      * Realiza validações, cria conta no Firebase Auth e salva dados no Firestore
      */
     const handleCadastro = async () => {
-        console.log('=== INICIANDO CADASTRO ===');
+        console.log('Iniciando cadastro...');
         console.log('Email:', email);
         console.log('Senha length:', senha.length);
 
@@ -49,7 +49,7 @@ const Cadastro_Usuario = ({ navigation }) => {
             // Criação do usuário no Firebase Authentication
             const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
             const user = userCredential.user;
-            console.log('✅ Usuário criado no Auth:', user.uid);
+            console.log('Usuário criado no Auth:', user.uid);
 
             console.log('Tentando salvar no Firestore...');
 
@@ -60,13 +60,13 @@ const Cadastro_Usuario = ({ navigation }) => {
                 dataCriacao: new Date().toISOString(),
             });
 
-            console.log('✅ Usuário salvo no Firestore com ID:', docRef.id);
+            console.log('Usuário salvo no Firestore com ID:', docRef.id);
 
             // Redirecionamento para tela de Login após sucesso
             navigation.navigate('Login');
 
         } catch (error) {
-            console.log('❌ ERRO NO CADASTRO:', error);
+            console.log('Erro no cadastro:', error);
             console.log('Código do erro:', error.code);
             console.log('Mensagem do erro:', error.message);
 

@@ -4,7 +4,6 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-/* Home - Tela 01 - Cabeçalho/Imagem/Benefícios/Botões/Rodapé */
 const Home = ({ navigation }) => {
     return (
         <SafeAreaProvider>
